@@ -2,6 +2,7 @@ package com.apuntado.tests;
 import org.junit.jupiter.api.Test;
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.*;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 import static com.tngtech.archunit.library.dependencies.SlicesRuleDefinition.slices;
 class ArchitectureFitnessTest {
@@ -26,5 +27,11 @@ class ArchitectureFitnessTest {
  @Test void orchestratorDoesNotKnowStrategies() {
   noClasses().that().haveSimpleName("TurnOrchestratorComponent")
    .should().dependOnClassesThat().resideInAnyPackage("..rules.clasica..","..rules.apuntado..","..rules.common..").check(code);
+ }
+ @Test void handEvaluatorDependsOnRuleAbstractionNotStrategies() {
+  classes().that().haveSimpleName("HandEvaluatorComponent")
+   .should().dependOnClassesThat().resideInAPackage("..rules.api..").check(code);
+  noClasses().that().haveSimpleName("HandEvaluatorComponent")
+   .should().dependOnClassesThat().resideInAnyPackage("..rules.clasica..","..rules.apuntado..").check(code);
  }
 }
