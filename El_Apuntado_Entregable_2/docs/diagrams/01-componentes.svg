@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="900" height="920" preserveAspectRatio="xMinYMin meet" viewBox="0 0 900 920" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="900" height="920"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-920)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="35" y="805" width="300" height="95" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="50" y="875" style="font-family: Helvetica; font-size: 14px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1750) scale(1,-1)">«component»</text>
+			<text x="50" y="847" style="font-family: Helvetica-Bold; font-size: 18px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1694) scale(1,-1)">Presentación</text>
+			<text x="50" y="823" style="font-family: Helvetica; font-size: 14px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1646) scale(1,-1)">Controlador y adaptador WebSocket</text>
+			<rect x="305" y="867" width="16" height="20" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="301" y="879" width="8" height="5" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="301" y="870" width="8" height="5" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="35" y="180" width="300" height="560" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="50" y="715" style="font-family: Helvetica; font-size: 14px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1430) scale(1,-1)">«component»</text>
+			<text x="50" y="687" style="font-family: Helvetica-Bold; font-size: 18px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1374) scale(1,-1)">TurnOrchestrator</text>
+			<text x="50" y="663" style="font-family: Helvetica; font-size: 14px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1326) scale(1,-1)">Mediador de casos de uso</text>
+			<rect x="305" y="707" width="16" height="20" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="301" y="719" width="8" height="5" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="301" y="710" width="8" height="5" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<path d="M 185,805 L 185,740 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="185 740, 180 750, 190 750" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,0%,0%); fill-rule: evenodd;"/>
+			<text x="200" y="767" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1534) scale(1,-1)">IGameCommands</text>
+			<rect x="575" y="645" width="290" height="95" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="590" y="715" style="font-family: Helvetica; font-size: 14px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1430) scale(1,-1)">«component»</text>
+			<text x="590" y="687" style="font-family: Helvetica-Bold; font-size: 18px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1374) scale(1,-1)">HandEvaluator</text>
+			<text x="590" y="663" style="font-family: Helvetica; font-size: 14px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1326) scale(1,-1)">Delega en IReglaJuego</text>
+			<rect x="835" y="707" width="16" height="20" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="831" y="719" width="8" height="5" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="831" y="710" width="8" height="5" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="330" y="695" width="10" height="10" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="570" y="695" width="10" height="10" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<path d="M 340,700 L 441,700 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 465,700 L 570,700 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<circle cx="455.0" cy="700" r="8" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.5; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<path d="M 456 714 C 436 714 436 686 456 686 " style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.5; fill: none; fill-rule: evenodd;"/>
+			<text x="351" y="725" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1450) scale(1,-1)">IHandEvaluation</text>
+			<rect x="575" y="515" width="290" height="95" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="590" y="585" style="font-family: Helvetica; font-size: 14px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1170) scale(1,-1)">«component»</text>
+			<text x="590" y="557" style="font-family: Helvetica-Bold; font-size: 18px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1114) scale(1,-1)">RoundScoring</text>
+			<text x="590" y="533" style="font-family: Helvetica; font-size: 14px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1066) scale(1,-1)">Penalizaciones y acumulación</text>
+			<rect x="835" y="577" width="16" height="20" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="831" y="589" width="8" height="5" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="831" y="580" width="8" height="5" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="330" y="565" width="10" height="10" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="570" y="565" width="10" height="10" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<path d="M 340,570 L 441,570 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 465,570 L 570,570 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<circle cx="455.0" cy="570" r="8" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.5; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<path d="M 456 584 C 436 584 436 556 456 556 " style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.5; fill: none; fill-rule: evenodd;"/>
+			<text x="351" y="595" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1190) scale(1,-1)">IScoringService</text>
+			<rect x="575" y="385" width="290" height="95" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="590" y="455" style="font-family: Helvetica; font-size: 14px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,910) scale(1,-1)">«component»</text>
+			<text x="590" y="427" style="font-family: Helvetica-Bold; font-size: 18px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,854) scale(1,-1)">MongoGameRepository</text>
+			<text x="590" y="403" style="font-family: Helvetica; font-size: 14px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,806) scale(1,-1)">Persistencia y control de versión</text>
+			<rect x="835" y="447" width="16" height="20" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="831" y="459" width="8" height="5" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="831" y="450" width="8" height="5" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="330" y="435" width="10" height="10" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="570" y="435" width="10" height="10" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<path d="M 340,440 L 441,440 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 465,440 L 570,440 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<circle cx="455.0" cy="440" r="8" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.5; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<path d="M 456 454 C 436 454 436 426 456 426 " style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.5; fill: none; fill-rule: evenodd;"/>
+			<text x="351" y="465" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,930) scale(1,-1)">IGameRepository</text>
+			<rect x="575" y="255" width="290" height="95" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="590" y="325" style="font-family: Helvetica; font-size: 14px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,650) scale(1,-1)">«component»</text>
+			<text x="590" y="297" style="font-family: Helvetica-Bold; font-size: 18px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,594) scale(1,-1)">RealtimePublisher</text>
+			<text x="590" y="273" style="font-family: Helvetica; font-size: 14px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,546) scale(1,-1)">Publica estado confirmado</text>
+			<rect x="835" y="317" width="16" height="20" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="831" y="329" width="8" height="5" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="831" y="320" width="8" height="5" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="330" y="305" width="10" height="10" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="570" y="305" width="10" height="10" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<path d="M 340,310 L 441,310 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 465,310 L 570,310 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<circle cx="455.0" cy="310" r="8" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.5; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<path d="M 456 324 C 436 324 436 296 456 296 " style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.5; fill: none; fill-rule: evenodd;"/>
+			<text x="351" y="335" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,670) scale(1,-1)">IRealtimePublisher</text>
+			<text x="55" y="140" style="font-family: Helvetica; font-size: 17px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,280) scale(1,-1)">Puertos cuadrados    Círculo provisto    Semicírculo requerido</text>
+			<text x="55" y="103" style="font-family: Helvetica; font-size: 16px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,206) scale(1,-1)">Vista del diseño objetivo. Solo el núcleo de validación está implementado.</text>
+			<text x="55" y="73" style="font-family: Helvetica; font-size: 16px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,146) scale(1,-1)">El orquestador no decide combinaciones ni importa estrategias concretas.</text>
+		</g>
+	</g>
+</svg>

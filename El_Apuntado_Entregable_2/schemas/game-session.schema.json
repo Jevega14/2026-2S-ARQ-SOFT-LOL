@@ -1,0 +1,440 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "_id",
+    "schemaVersion",
+    "version",
+    "room",
+    "variant",
+    "rulesProfile",
+    "status",
+    "players",
+    "currentRound",
+    "turn",
+    "rounds",
+    "totals",
+    "receipts",
+    "createdAt",
+    "updatedAt"
+  ],
+  "properties": {
+    "_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "schemaVersion": {
+      "const": 1
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "room": {
+      "$ref": "#/$defs/RoomSnapshot"
+    },
+    "variant": {
+      "enum": [
+        "CLASICA",
+        "APUNTADO101"
+      ]
+    },
+    "rulesProfile": {
+      "$ref": "#/$defs/RulesProfile"
+    },
+    "status": {
+      "enum": [
+        "WAITING",
+        "ACTIVE",
+        "FINISHED"
+      ]
+    },
+    "players": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/PlayerSeat"
+      },
+      "minItems": 2,
+      "maxItems": 4
+    },
+    "currentRound": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "turn": {
+      "$ref": "#/$defs/TurnState"
+    },
+    "rounds": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Round"
+      },
+      "minItems": 1
+    },
+    "totals": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ScoreTotal"
+      },
+      "minItems": 2
+    },
+    "receipts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/CommandReceipt"
+      },
+      "minItems": 0
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:apuntado:game-session:1",
+  "$defs": {
+    "Card": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "rank",
+        "suit",
+        "points"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rank": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 13
+        },
+        "suit": {
+          "enum": [
+            "H",
+            "D",
+            "S",
+            "C"
+          ]
+        },
+        "points": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "PlayerSeat": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "playerId",
+        "seat",
+        "displayNameSnapshot"
+      ],
+      "properties": {
+        "playerId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "seat": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "displayNameSnapshot": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "HandState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "playerId",
+        "cards"
+      ],
+      "properties": {
+        "playerId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "cards": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Card"
+          },
+          "minItems": 0
+        }
+      }
+    },
+    "Move": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "commandId",
+        "actorId",
+        "turnNumber",
+        "type",
+        "cardId",
+        "at"
+      ],
+      "properties": {
+        "commandId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "actorId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "turnNumber": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "type": {
+          "enum": [
+            "DRAW_DECK",
+            "DRAW_DISCARD",
+            "DISCARD",
+            "CLOSE"
+          ]
+        },
+        "cardId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "RoundScore": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "playerId",
+        "penalty",
+        "totalAfter"
+      ],
+      "properties": {
+        "playerId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "penalty": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "totalAfter": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "Round": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "number",
+        "status",
+        "closedBy",
+        "hands",
+        "deck",
+        "discard",
+        "moves",
+        "scores"
+      ],
+      "properties": {
+        "number": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "status": {
+          "enum": [
+            "OPEN",
+            "CLOSED"
+          ]
+        },
+        "closedBy": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "hands": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/HandState"
+          },
+          "minItems": 2
+        },
+        "deck": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Card"
+          },
+          "minItems": 0
+        },
+        "discard": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Card"
+          },
+          "minItems": 0
+        },
+        "moves": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Move"
+          },
+          "minItems": 0
+        },
+        "scores": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/RoundScore"
+          },
+          "minItems": 0
+        }
+      }
+    },
+    "CommandReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "commandId",
+        "actorId",
+        "payloadHash",
+        "resultVersion",
+        "resultCode"
+      ],
+      "properties": {
+        "commandId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "actorId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "payloadHash": {
+          "type": "string",
+          "minLength": 1
+        },
+        "resultVersion": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "resultCode": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "ScoreTotal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "playerId",
+        "total"
+      ],
+      "properties": {
+        "playerId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "total": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "RoomSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "roomId",
+        "name"
+      ],
+      "properties": {
+        "roomId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "RulesProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "version",
+        "approved"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "approved": {
+          "type": "boolean"
+        }
+      }
+    },
+    "TurnState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "playerId",
+        "number",
+        "phase",
+        "deadline"
+      ],
+      "properties": {
+        "playerId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "number": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "phase": {
+          "enum": [
+            "DRAW",
+            "DISCARD",
+            "CLOSED"
+          ]
+        },
+        "deadline": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        }
+      }
+    }
+  },
+  "title": "GameSessionEntity"
+}

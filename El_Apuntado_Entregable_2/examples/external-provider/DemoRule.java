@@ -1,0 +1,1 @@
+package demo; public class DemoRule implements com.apuntado.domain.rules.api.IReglaJuego {public String id(){return "DEMO";} public boolean permiteCerrar(com.apuntado.domain.model.Hand h){return false;}}

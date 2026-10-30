@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="900" height="1080" preserveAspectRatio="xMinYMin meet" viewBox="0 0 900 1080" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="900" height="1080"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-1080)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="30" y="750" width="390" height="310" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="42" y="1030" style="font-family: Helvetica-Bold; font-size: 18px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,2060) scale(1,-1)">GameSessionEntity</text>
+			<path d="M 30,1017 L 420,1017 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<text x="42" y="994" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1988) scale(1,-1)">_id: String</text>
+			<text x="42" y="969" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1938) scale(1,-1)">version: long; schemaVersion: int</text>
+			<text x="42" y="944" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1888) scale(1,-1)">variant: String; status: String</text>
+			<text x="42" y="919" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1838) scale(1,-1)">room: RoomSnapshot</text>
+			<text x="42" y="894" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1788) scale(1,-1)">rulesProfile: RulesProfile</text>
+			<text x="42" y="869" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1738) scale(1,-1)">currentRound: int; turn: TurnState</text>
+			<text x="42" y="844" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1688) scale(1,-1)">createdAt, updatedAt: Instant</text>
+			<path d="M 30,830 L 420,830 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<text x="42" y="805" style="font-family: Helvetica; font-size: 14px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1610) scale(1,-1)">closeRound(command): GameSessionEntity</text>
+			<text x="42" y="780" style="font-family: Helvetica; font-size: 14px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1560) scale(1,-1)">validateInvariants(): void</text>
+			<rect x="510" y="875" width="360" height="185" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="522" y="1030" style="font-family: Helvetica-Bold; font-size: 18px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,2060) scale(1,-1)">PlayerEntity</text>
+			<path d="M 510,1017 L 870,1017 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<text x="522" y="994" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1988) scale(1,-1)">_id: String</text>
+			<text x="522" y="969" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1938) scale(1,-1)">displayName: String</text>
+			<text x="522" y="944" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1888) scale(1,-1)">createdAt: Instant</text>
+			<path d="M 510,930 L 870,930 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<text x="522" y="905" style="font-family: Helvetica; font-size: 14px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1810) scale(1,-1)">rename(name): void</text>
+			<rect x="510" y="725" width="360" height="105" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="522" y="800" style="font-family: Helvetica-Bold; font-size: 18px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1600) scale(1,-1)">PlayerSeat</text>
+			<path d="M 510,787 L 870,787 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<text x="522" y="764" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1528) scale(1,-1)">playerId: String; seat: int</text>
+			<text x="522" y="739" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1478) scale(1,-1)">displayNameSnapshot: String</text>
+			<path d="M 420,930 L 470,930 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 470,930 L 470,780 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 470,780 L 510,780 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<text x="425" y="942" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1884) scale(1,-1)">1</text>
+			<text x="477" y="795" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1590) scale(1,-1)">2..*</text>
+			<path d="M 680,830 L 680,875 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<text x="688" y="808" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1616) scale(1,-1)">0..*</text>
+			<text x="688" y="883" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1766) scale(1,-1)">1</text>
+			<rect x="30" y="470" width="390" height="210" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="42" y="650" style="font-family: Helvetica-Bold; font-size: 18px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1300) scale(1,-1)">RoundEntity</text>
+			<path d="M 30,637 L 420,637 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<text x="42" y="614" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1228) scale(1,-1)">number: int; status: String</text>
+			<text x="42" y="589" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1178) scale(1,-1)">closedBy: String?</text>
+			<text x="42" y="564" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1128) scale(1,-1)">deck, discard: List&lt;CardData&gt;</text>
+			<path d="M 30,550 L 420,550 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<text x="42" y="525" style="font-family: Helvetica; font-size: 14px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1050) scale(1,-1)">recordMove(move): void</text>
+			<text x="42" y="500" style="font-family: Helvetica; font-size: 14px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1000) scale(1,-1)">close(scores): void</text>
+			<path d="M 210,750 L 210,680 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="210 750, 205 742, 210 734, 215 742" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,0%,0%); fill-rule: evenodd;"/>
+			<text x="218" y="728" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1456) scale(1,-1)">1</text>
+			<text x="218" y="688" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1376) scale(1,-1)">1..*</text>
+			<rect x="510" y="550" width="360" height="105" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="522" y="625" style="font-family: Helvetica-Bold; font-size: 18px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1250) scale(1,-1)">RoundScoreEntity</text>
+			<path d="M 510,612 L 870,612 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<text x="522" y="589" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1178) scale(1,-1)">playerId: String</text>
+			<text x="522" y="564" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1128) scale(1,-1)">penalty: int; totalAfter: int</text>
+			<path d="M 420,605 L 510,605 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<text x="425" y="620" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1240) scale(1,-1)">1</text>
+			<text x="466" y="620" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1240) scale(1,-1)">0..*</text>
+			<rect x="30" y="205" width="390" height="185" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="42" y="360" style="font-family: Helvetica-Bold; font-size: 18px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,720) scale(1,-1)">HandStateEntity</text>
+			<path d="M 30,347 L 420,347 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<text x="42" y="324" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,648) scale(1,-1)">playerId: String</text>
+			<text x="42" y="299" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,598) scale(1,-1)">cards: List&lt;CardData&gt;</text>
+			<path d="M 30,285 L 420,285 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<text x="42" y="260" style="font-family: Helvetica; font-size: 14px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,520) scale(1,-1)">draw(card): void</text>
+			<text x="42" y="235" style="font-family: Helvetica; font-size: 14px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,470) scale(1,-1)">discard(cardId): void</text>
+			<path d="M 210,465 L 210,390 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="210 465, 205 457, 210 449, 215 457" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,0%,0%); fill-rule: evenodd;"/>
+			<text x="218" y="443" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,886) scale(1,-1)">1</text>
+			<text x="218" y="398" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,796) scale(1,-1)">2..*</text>
+			<rect x="510" y="330" width="360" height="130" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="522" y="430" style="font-family: Helvetica-Bold; font-size: 18px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,860) scale(1,-1)">MoveEntity</text>
+			<path d="M 510,417 L 870,417 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<text x="522" y="394" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,788) scale(1,-1)">commandId, actorId: String</text>
+			<text x="522" y="369" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,738) scale(1,-1)">turnNumber: int; type: String</text>
+			<text x="522" y="344" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,688) scale(1,-1)">cardId: String?; at: Instant</text>
+			<path d="M 420,510 L 465,510 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 465,510 L 465,390 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 465,390 L 510,390 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<text x="426" y="525" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,1050) scale(1,-1)">1</text>
+			<text x="470" y="405" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,810) scale(1,-1)">0..*</text>
+			<rect x="510" y="150" width="360" height="105" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="522" y="225" style="font-family: Helvetica-Bold; font-size: 18px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,450) scale(1,-1)">CardData</text>
+			<path d="M 510,212 L 870,212 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<text x="522" y="189" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,378) scale(1,-1)">id, suit: String</text>
+			<text x="522" y="164" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,328) scale(1,-1)">rank: int; points: int</text>
+			<path d="M 420,290 L 460,290 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 460,290 L 460,200 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 460,200 L 510,200 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<text x="426" y="303" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,606) scale(1,-1)">1</text>
+			<text x="470" y="216" style="font-family: Helvetica; font-size: 15px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,432) scale(1,-1)">0..*</text>
+			<text x="30" y="80" style="font-family: Helvetica; font-size: 16px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,160) scale(1,-1)">Composición: rondas, manos, jugadas y puntajes se embeben en la partida.</text>
+			<text x="30" y="50" style="font-family: Helvetica; font-size: 16px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,100) scale(1,-1)">PlayerSeat referencia PlayerEntity por playerId. DTO de persistencia propuestos.</text>
+		</g>
+	</g>
+</svg>

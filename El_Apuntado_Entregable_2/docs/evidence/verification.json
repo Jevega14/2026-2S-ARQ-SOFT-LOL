@@ -1,0 +1,30 @@
+[
+  {
+    "case": "ui_bypass",
+    "rejected": true
+  },
+  {
+    "case": "strategy_dependency",
+    "rejected": true
+  },
+  {
+    "case": "complexity_11",
+    "rejected": true
+  },
+  {
+    "case": "clean_baseline",
+    "success": true
+  },
+  {
+    "case": "external_provider",
+    "provider": "DEMO",
+    "core_unchanged": true,
+    "orchestrator_sha256": "37ebdd7d668a91102e29b996fd9bc49ca529a40316d90d5a375c8c33c56fecc7"
+  },
+  {
+    "case": "MVP1_profile",
+    "tests": 22,
+    "failures": 0,
+    "checkstyle_violations": 0
+  }
+]

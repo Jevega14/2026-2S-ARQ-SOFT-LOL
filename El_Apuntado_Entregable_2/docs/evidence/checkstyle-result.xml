@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="10.21.1">
+<file name="/workspace/scratch/45315a1d13a6/entregable2/soporte/src/main/java/com/apuntado/application/TurnOrchestratorComponent.java">
+</file>
+<file name="/workspace/scratch/45315a1d13a6/entregable2/soporte/src/main/java/com/apuntado/domain/scoring/RoundScoringComponent.java">
+</file>
+<file name="/workspace/scratch/45315a1d13a6/entregable2/soporte/src/main/java/com/apuntado/domain/rules/clasica/ReglaClasica.java">
+</file>
+<file name="/workspace/scratch/45315a1d13a6/entregable2/soporte/src/main/java/com/apuntado/domain/rules/common/Groups.java">
+</file>
+<file name="/workspace/scratch/45315a1d13a6/entregable2/soporte/src/main/java/com/apuntado/domain/rules/apuntado/ReglaApuntado.java">
+</file>
+<file name="/workspace/scratch/45315a1d13a6/entregable2/soporte/src/main/java/com/apuntado/domain/rules/api/IReglaJuego.java">
+</file>
+<file name="/workspace/scratch/45315a1d13a6/entregable2/soporte/src/main/java/com/apuntado/domain/gameplay/HandEvaluatorComponent.java">
+</file>
+<file name="/workspace/scratch/45315a1d13a6/entregable2/soporte/src/main/java/com/apuntado/domain/model/Card.java">
+</file>
+<file name="/workspace/scratch/45315a1d13a6/entregable2/soporte/src/main/java/com/apuntado/domain/model/Hand.java">
+</file>
+<file name="/workspace/scratch/45315a1d13a6/entregable2/soporte/src/main/java/com/apuntado/bootstrap/RuleRegistry.java">
+</file>
+<file name="/workspace/scratch/45315a1d13a6/entregable2/soporte/src/main/java/com/apuntado/presentation/CloseController.java">
+</file>
+</checkstyle>

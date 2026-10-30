@@ -1,0 +1,74 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ---------------< com.apuntado:arquitectura-entregable2 >----------------
+[INFO] Building arquitectura-entregable2 1.0.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ arquitectura-entregable2 ---
+[INFO] Deleting /workspace/scratch/45315a1d13a6/entregable2/soporte/target
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ arquitectura-entregable2 ---
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ arquitectura-entregable2 ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 12 source files with javac [debug release 17] to target/classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ arquitectura-entregable2 ---
+[INFO] skip non existing resourceDirectory /workspace/scratch/45315a1d13a6/entregable2/soporte/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ arquitectura-entregable2 ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 2 source files with javac [debug release 17] to target/test-classes
+[INFO] 
+[INFO] --- surefire:3.5.2:test (default-test) @ arquitectura-entregable2 ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.apuntado.tests.ArchitectureFitnessTest
+SLF4J(W): No SLF4J providers were found.
+SLF4J(W): Defaulting to no-operation (NOP) logger implementation
+SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
+[ERROR] Tests run: 6, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 1.589 s <<< FAILURE! -- in com.apuntado.tests.ArchitectureFitnessTest
+[ERROR] com.apuntado.tests.ArchitectureFitnessTest.presentationCannotBypassApplication -- Time elapsed: 0.009 s <<< FAILURE!
+java.lang.AssertionError: 
+Architecture Violation [Priority: MEDIUM] - Rule 'no classes that reside in a package '..presentation..' should depend on classes that reside in any package ['..persistence..', '..domain..', 'com.mongodb..', 'java.sql..']' was violated (1 times):
+Field <com.apuntado.presentation.IllegalDependency.hand> has type <com.apuntado.domain.model.Hand> in (IllegalDependency.java:0)
+	at com.tngtech.archunit.lang.ArchRule$Assertions.assertNoViolation(ArchRule.java:94)
+	at com.tngtech.archunit.lang.ArchRule$Assertions.check(ArchRule.java:86)
+	at com.tngtech.archunit.lang.ArchRule$Factory$SimpleArchRule.check(ArchRule.java:165)
+	at com.tngtech.archunit.lang.syntax.ObjectsShouldInternal.check(ObjectsShouldInternal.java:81)
+	at com.apuntado.tests.ArchitectureFitnessTest.presentationCannotBypassApplication(ArchitectureFitnessTest.java:11)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+
+[INFO] 
+[INFO] Results:
+[INFO] 
+[ERROR] Failures: 
+[ERROR]   ArchitectureFitnessTest.presentationCannotBypassApplication:11 Architecture Violation [Priority: MEDIUM] - Rule 'no classes that reside in a package '..presentation..' should depend on classes that reside in any package ['..persistence..', '..domain..', 'com.mongodb..', 'java.sql..']' was violated (1 times):
+Field <com.apuntado.presentation.IllegalDependency.hand> has type <com.apuntado.domain.model.Hand> in (IllegalDependency.java:0)
+[INFO] 
+[ERROR] Tests run: 6, Failures: 1, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  3.314 s
+[INFO] Finished at: 2026-10-29T16:51:26-05:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:3.5.2:test (default-test) on project arquitectura-entregable2: There are test failures.
+[ERROR] 
+[ERROR] See /workspace/scratch/45315a1d13a6/entregable2/soporte/target/surefire-reports for the individual test results.
+[ERROR] See dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
