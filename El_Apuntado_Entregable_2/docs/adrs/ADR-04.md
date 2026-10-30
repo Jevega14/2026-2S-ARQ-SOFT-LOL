@@ -1,4 +1,4 @@
-# ADR-04 Motor y modelo de persistencia
+# ADR-04 — Motor y modelo de persistencia
 
 ## Estado y alcance
 
@@ -10,7 +10,9 @@ Apuntado requiere historial de rondas y acumulación hasta 101. Un cierre parcia
 
 ## Decisión
 
-Usar partidas como agregado documental con rondas, manos, movimientos, puntajes y recibos embebidos. Referenciar perfiles de jugadores y sala; conservar snapshots descriptivos. Persistir cada comando aceptado mediante versión esperada y escritura atómica del documento. La copia en memoria no es la fuente de verdad.
+Usar partidas como agregado documental con rondas, manos, movimientos, puntajes y recibos embebidos. Referenciar perfiles de jugadores y sala; conservar snapshots descriptivos.
+
+Persistir cada comando aceptado mediante versión esperada y escritura atómica del documento. La copia en memoria no es la fuente de verdad.
 
 ## Alternativas
 
@@ -18,11 +20,19 @@ SQL ofrece claves foráneas y transacciones sobre tablas normalizadas, pero obli
 
 ## Consecuencias
 
-Se obtiene recuperación de una partida mediante un documento y se evita repartir el cierre entre colecciones. Aumentan la validación de referencias y el control de tamaño. Una política de archivo que separe rondas cambiaría la frontera transaccional y necesita revisión. El perfil de reglas queda versionado para interpretar partidas antiguas.
+Se obtiene recuperación de una partida mediante un documento y se evita repartir el cierre entre colecciones. Aumentan la validación de referencias y el control de tamaño.
+
+Una política de archivo que separe rondas cambiaría la frontera transaccional y necesita revisión. El perfil de reglas queda versionado para interpretar partidas antiguas.
 
 ## Cumplimiento verificable
 
-Validar cada candidato con game-session.schema.json y verificar invariantes antes de escribir. En integración, ejecutar dos cierres simultáneos desde la misma versión: exactamente uno debe confirmar. Repetir un comando no debe duplicar penalizaciones. La suma del historial debe coincidir con totals. Verificar recuperación tras reinicio y rechazo preventivo a 12 MiB. Son criterios pendientes de ejecución en el MVP.
+- Validar cada candidato con `game-session.schema.json` y verificar invariantes antes de escribir.
+- En integración, ejecutar dos cierres simultáneos desde la misma versión: exactamente uno debe confirmar.
+- Repetir un comando no debe duplicar penalizaciones.
+- La suma del historial debe coincidir con `totals`.
+- Verificar recuperación tras reinicio y rechazo preventivo a 12 MiB.
+
+Estos son criterios pendientes de ejecución en el MVP.
 
 ## Revisión
 
