@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>El Apuntado — MVP</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>El Apuntado</h1>
+    <p class="subtitle">MVP jugable — Clásica 4-3-3 y Apuntado a 101</p>
+  </header>
+
+  <main>
+    <section id="setup" class="card">
+      <h2>Nueva partida</h2>
+      <div class="row">
+        <label for="variant">Modalidad</label>
+        <select id="variant"></select>
+      </div>
+      <div id="players"></div>
+      <div class="row">
+        <button id="add-player" class="secondary" type="button">Añadir jugador</button>
+        <button id="remove-player" class="secondary" type="button">Quitar jugador</button>
+        <button id="create-game" type="button">Iniciar partida</button>
+      </div>
+      <p class="hint">De 2 a 4 jugadores. El juego funciona en modo "hot-seat": en cada turno se muestra la mano del jugador activo.</p>
+      <p id="setup-error" class="error"></p>
+    </section>
+
+    <section id="game" class="card hidden">
+      <div class="game-header">
+        <div>
+          <h2 id="game-title"></h2>
+          <p id="game-meta" class="subtitle"></p>
+        </div>
+        <div class="actions">
+          <button id="refresh" class="secondary" type="button">Actualizar</button>
+          <button id="new-game" class="secondary" type="button">Nueva partida</button>
+        </div>
+      </div>
+
+      <p id="turn-info" class="turn-info"></p>
+      <p id="message" class="message"></p>
+      <p id="error" class="error"></p>
+
+      <div class="table-grid">
+        <div>
+          <h3>Jugadores</h3>
+          <table>
+            <thead>
+              <tr><th>Jugador</th><th>Total</th><th>Cartas</th><th></th></tr>
+            </thead>
+            <tbody id="players-body"></tbody>
+          </table>
+        </div>
+        <div>
+          <h3>Mesa</h3>
+          <p>Mazo: <strong id="deck-count"></strong></p>
+          <p>Pozo: <strong id="discard-count"></strong></p>
+          <div id="discard-top" class="discard-top"></div>
+        </div>
+      </div>
+
+      <h3>Tu mano</h3>
+      <p id="hand-hint" class="hint"></p>
+      <div id="hand" class="hand"></div>
+
+      <div id="actions" class="actions"></div>
+
+      <div id="last-results"></div>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>
