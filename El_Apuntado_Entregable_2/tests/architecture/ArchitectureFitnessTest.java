@@ -22,7 +22,7 @@ class ArchitectureFitnessTest {
  @Test void noPackageCycles() {slices().matching("com.apuntado.(**) ".trim()).should().beFreeOfCycles().check(code);}
  @Test void domainIsPure() {
   noClasses().that().resideInAPackage("..domain..")
-   .should().dependOnClassesThat().resideInAnyPackage("..application..","..bootstrap..","..presentation..","..persistence..","java.net..","java.sql..","com.mongodb..","org.springframework..","jakarta..","io.netty..").check(code);
+   .should().dependOnClassesThat().resideInAnyPackage("..application..","..bootstrap..","..presentation..","..persistence..","..realtime..","java.net..","java.sql..","com.mongodb..","org.bson..","org.springframework..","jakarta..","io.netty..").check(code);
  }
  @Test void orchestratorDoesNotKnowStrategies() {
   noClasses().that().haveSimpleName("TurnOrchestratorComponent")
@@ -33,5 +33,25 @@ class ArchitectureFitnessTest {
    .should().dependOnClassesThat().resideInAPackage("..rules.api..").check(code);
   noClasses().that().haveSimpleName("HandEvaluatorComponent")
    .should().dependOnClassesThat().resideInAnyPackage("..rules.clasica..","..rules.apuntado..").check(code);
+ }
+ @Test void applicationStaysFrameworkAndInfrastructureAgnostic() {
+  noClasses().that().resideInAPackage("..application..")
+   .should().dependOnClassesThat().resideInAnyPackage(
+    "..persistence..","..presentation..","..config..","org.springframework..","com.mongodb..","java.sql..").check(code);
+ }
+ @Test void persistenceDoesNotKnowPresentation() {
+  noClasses().that().resideInAPackage("..persistence..")
+   .should().dependOnClassesThat().resideInAPackage("..presentation..").check(code);
+ }
+ @Test void presentationDoesNotKnowConcreteRules() {
+  noClasses().that().resideInAPackage("..presentation..")
+   .should().dependOnClassesThat().resideInAnyPackage("..rules.clasica..","..rules.apuntado..","..rules.common..").check(code);
+ }
+ @Test void realtimeOnlyProjectsApplicationViews() {
+  noClasses().that().resideInAPackage("..realtime..")
+   .should().dependOnClassesThat().resideInAnyPackage("..domain..","..persistence..","com.mongodb..","java.sql..").check(code);
+ }
+ @Test void compositionRootDoesNotCreateCycles() {
+  slices().matching("com.apuntado.(**)").should().beFreeOfCycles().check(code);
  }
 }
