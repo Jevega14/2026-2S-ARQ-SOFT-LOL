@@ -1,3 +1,4 @@
 target/
 examples/external-provider/build/
 *.jar
+/.tooling/
