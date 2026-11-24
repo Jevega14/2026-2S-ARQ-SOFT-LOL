@@ -14,4 +14,7 @@ public final class RuleRegistry {
   if(rule==null) throw new IllegalArgumentException("Variante desconocida");
   return rule;
  }
+ public List<String> ids() {
+  return rules.keySet().stream().sorted().toList();
+ }
 }
