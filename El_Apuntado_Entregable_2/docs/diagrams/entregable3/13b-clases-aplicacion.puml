@@ -1,0 +1,234 @@
+@startuml 13b-clases-aplicacion
+!include _estilo.iuml
+title Diagrama UML de Clases de Implementación (2/2) — Aplicación, puertos y adaptadores (hexagonal en monolito modular)
+skinparam classAttributeIconSize 0
+skinparam classFontStyle bold
+skinparam classBackgroundColor #FFFFFF
+skinparam classBorderColor #2F3E36
+skinparam packageBackgroundColor #F6F2E7
+skinparam packageBorderColor #9AA79C
+hide empty members
+left to right direction
+
+package "presentation" {
+  class GameController <<@RestController>> {
+    - service : GameApplicationService
+    + variants() : List<VariantView>
+    + create(request : CreateGameRequest) : ResponseEntity<GameView>
+    + get(gameId : String, viewerId : String) : GameView
+    + drawFromDeck(gameId : String, request : PlayerActionRequest) : GameView
+    + drawFromDiscard(gameId : String, request : PlayerActionRequest) : GameView
+    + discard(gameId : String, request : DiscardRequest) : GameView
+    + endTurn(gameId : String, request : PlayerActionRequest) : GameView
+    + closeRound(gameId : String, request : PlayerActionRequest) : GameView
+  }
+  class ApiExceptionHandler <<@RestControllerAdvice>> {
+    + notFound(e : GameNotFoundException) : ResponseEntity<ApiError>  // 404
+    + conflict(e : RuntimeException) : ResponseEntity<ApiError>  // 409
+    + badRequest(e : RuntimeException) : ResponseEntity<ApiError>  // 400
+  }
+}
+
+package "application" {
+  class GameApplicationService <<final, fachada de casos de uso>> {
+    - repository : IGameRepository
+    - orchestrator : TurnOrchestratorComponent
+    - rules : RuleRegistry
+    - publisher : IRealtimePublisher
+    - audit : IAuditTrail
+    + variants() : List<VariantView>
+    + createGame(command : CreateGameCommand) : GameView
+    + getGame(gameId : String, viewerId : String) : GameView
+    + drawFromDeck(gameId, playerId, commandId : String) : GameView
+    + drawFromDiscard(gameId, playerId, commandId : String) : GameView
+    + discard(gameId, playerId, cardId, commandId : String) : GameView
+    + endTurn(gameId, playerId, commandId : String) : GameView
+    + closeRound(gameId, playerId, commandId : String) : GameView
+    - mutate(command : PendingCommand, operation : UnaryOperator<GameSession>) : GameView
+    - execute(command, operation, started : long) : GameView
+    - replay(command : PendingCommand, started : long) : Optional<GameView>
+    - record(command, session, outcome : String, started : long, detail : String) : void
+    - notify(session : GameSession, eventType : String) : void
+    - view(session : GameSession, viewerId : String) : GameView
+  }
+  class TurnOrchestratorComponent <<final, mediador>> {
+    - evaluator : HandEvaluatorComponent
+    - closing : RoundClosingService
+    - rules : RuleRegistry
+    - decks : Supplier<List<Card>>
+    + startGame(id, variantId : String, players : List<PlayerSeat>) : GameSession
+    + drawFromDeck(game : GameSession, playerId : String) : GameSession
+    + drawFromDiscard(game : GameSession, playerId : String) : GameSession
+    + discard(game : GameSession, playerId, cardId : String) : GameSession
+    + endTurn(game : GameSession, playerId : String) : GameSession
+    + closeRound(game : GameSession, playerId : String) : GameSession
+    + validateClose(hand : Hand, rule : IReglaJuego) : boolean
+    + closeRequirement(variantId : String) : String
+  }
+  class CommandConflictException
+  class OptimisticLockException
+  class GameNotFoundException
+  class DuplicateGameException
+
+  package "port" {
+    interface IGameRepository <<port>> {
+      + findById(gameId : String) : Optional<GameSession>
+      + create(session : GameSession) : void
+      + save(previous : GameSession, updated : GameSession, receipt : CommandReceipt) : void
+      + receipt(gameId : String, commandId : String) : Optional<CommandReceipt>
+    }
+    interface IRealtimePublisher <<port>> {
+      + publish(gameId : String, eventType : String, views : List<GameView>) : void
+    }
+    interface IAuditTrail <<port>> {
+      + {static} NONE : IAuditTrail
+      + record(entry : AuditEntry) : void
+    }
+    class CommandReceipt <<record>> {
+      - commandId : String
+      - actorId : String
+      - payloadHash : String  // SHA-256
+      - resultVersion : int
+      + sameCommandAs(other : CommandReceipt) : boolean
+    }
+    class AuditEntry <<record>> {
+      - at : Instant
+      - gameId : String
+      - variantId : String
+      - playerId : String
+      - action : String
+      - commandId : String
+      - outcome : String  // OK, REPLAY, REJECTED
+      - version : int
+      - round : int
+      - turn : int
+      - durationMicros : long
+      - detail : String
+    }
+  }
+  package "view" {
+    class GameView <<record>> {
+      - gameId, variantId, status, viewerId : String
+      - currentRound, version, deckCount, discardCount : int
+      - turn : TurnView
+      - winnerId, lastClosedBy, closeRequirement : String
+      - players : List<PlayerView>
+      - hand : List<CardView>  // solo la del viewer
+      - discardTop : CardView
+      - lastRoundResults : List<RoundResultView>
+    }
+    class VariantView <<record>> {
+      - id : String
+      - closeRequirement : String
+      - singleRound : boolean
+    }
+  }
+}
+
+package "persistence" {
+  class InMemoryGameRepository <<final, perfil por defecto>> {
+    - games : Map<String, GameSession>
+    - receipts : Map<String, CommandReceipt>
+    + save(previous, updated, receipt) : void {synchronized}
+  }
+  package "mongo" {
+    class MongoGameRepository <<final, perfil mongo>> {
+      ~ {static} COLLECTION : String = "game_sessions"
+      ~ {static} MAX_DOCUMENT_BYTES : int = 12 MiB
+      - template : MongoTemplate
+      + save(previous, updated, receipt) : void  // updateFirst con filtro de versión
+      + receipt(gameId, commandId) : Optional<CommandReceipt>
+      - resolveFailure(gameId : String) : void
+      - {static} ensureSize(document : Document) : void
+    }
+    class GameSessionMapper <<utility>> {
+      + {static} toDocument(session : GameSession) : Document
+      + {static} toDomain(document : Document) : GameSession
+      + {static} receiptToDocument(receipt : CommandReceipt) : Document
+      + {static} receiptFromDocument(document : Document) : CommandReceipt
+    }
+  }
+}
+
+package "realtime" {
+  class WebSocketRealtimePublisher <<final>> {
+    - handler : GameWebSocketHandler
+    - mapper : ObjectMapper
+    + publish(gameId, eventType, views : List<GameView>) : void
+  }
+  class GameWebSocketHandler {
+    - sessions : Map<String, Set<WebSocketSession>>
+    + afterConnectionEstablished(session : WebSocketSession) : void
+    + afterConnectionClosed(session, status : CloseStatus) : void
+    + send(gameId, playerId, payload : String) : void
+  }
+}
+
+package "audit" {
+  class JsonLinesAuditTrail <<final>> {
+    - {static} AUDIT : Logger
+    + record(entry : AuditEntry) : void
+    ~ {static} toJson(entry : AuditEntry) : String
+  }
+}
+
+package "config" {
+  class ApplicationConfig <<@Configuration, composition root>> {
+    + deckSupplier(mode : String) : Supplier<List<Card>>
+    + gameRepository() : IGameRepository
+    + mongoGameRepository(template : MongoTemplate) : IGameRepository
+    + auditTrail() : IAuditTrail
+    + gameApplicationService(...) : GameApplicationService
+  }
+  class DemoDeckSupplier <<final>> {
+    ~ {static} FIRST_HAND : Set<String>
+    + get() : List<Card>
+  }
+}
+
+package "domain / bootstrap  (ver diagrama 1/2)" as dom {
+  class RuleRegistry
+  class RoundClosingService
+  class HandEvaluatorComponent
+  class GameSession
+}
+
+GameController --> "1" GameApplicationService
+GameController ..> GameView
+ApiExceptionHandler ..> CommandConflictException
+GameApplicationService --> "1" TurnOrchestratorComponent
+GameApplicationService --> "1" IGameRepository
+GameApplicationService --> "1" IRealtimePublisher
+GameApplicationService --> "1" IAuditTrail
+GameApplicationService --> "1" RuleRegistry
+GameApplicationService ..> CommandReceipt : crea
+GameApplicationService ..> AuditEntry : crea
+GameApplicationService ..> GameView : proyecta
+GameApplicationService ..> CommandConflictException : lanza
+TurnOrchestratorComponent --> RuleRegistry
+TurnOrchestratorComponent *-- RoundClosingService
+TurnOrchestratorComponent --> HandEvaluatorComponent
+TurnOrchestratorComponent ..> GameSession
+IGameRepository <|.. InMemoryGameRepository
+IGameRepository <|.. MongoGameRepository
+MongoGameRepository ..> GameSessionMapper
+MongoGameRepository ..> OptimisticLockException : lanza
+IRealtimePublisher <|.. WebSocketRealtimePublisher
+WebSocketRealtimePublisher --> GameWebSocketHandler
+IAuditTrail <|.. JsonLinesAuditTrail
+ApplicationConfig ..> GameApplicationService : «create»
+ApplicationConfig ..> DemoDeckSupplier : «create»
+ApplicationConfig ..> MongoGameRepository : «create»
+ApplicationConfig ..> InMemoryGameRepository : «create»
+ApplicationConfig ..> JsonLinesAuditTrail : «create»
+
+legend bottom
+  Paquetes bajo com.apuntado. Visibilidad: <b>+</b> público · <b>-</b> privado · <b>~~</b> paquete · <b>#</b> protegido (no se usa).
+  Inversión de dependencias: application define los puertos (IGameRepository, IRealtimePublisher, IAuditTrail);
+  persistence, realtime y audit los implementan; solo config conoce las clases concretas.
+  Reglas ArchUnit vigentes: presentation solo depende de application/command/view (Deméter entre capas);
+  application no depende de Spring, Mongo ni adaptadores; realtime/presentation no conocen persistence; sin ciclos.
+  Todas las clases mostradas están <b>implementadas</b>. Diseño objetivo de la Entrega 2 aún no implementado:
+  rulesProfile y schemaVersion en el documento, salas (room) y moves por ronda.
+endlegend
+@enduml

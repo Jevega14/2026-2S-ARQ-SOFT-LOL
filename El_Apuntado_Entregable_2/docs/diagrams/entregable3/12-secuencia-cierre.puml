@@ -1,0 +1,126 @@
+@startuml 12-secuencia-cierre
+!include _estilo.iuml
+title Diagrama UML de Secuencia — Intento de cierre de ronda y liquidación de puntos
+autonumber "<b>0."
+skinparam sequenceMessageAlign left
+skinparam sequenceGroupBodyBackGroundColor #FFFFFF
+
+actor "Jugador" as J
+box "Navegador" #F6F2E7
+  participant "UI\n(app.js)" as UI
+end box
+box "Proceso Spring Boot (JVM)" #EEF4EA
+  participant "GameController\n«presentation»" as C
+  participant "GameApplicationService\n«application»" as S
+  participant "TurnOrchestratorComponent\n«GameOrchestrator»" as O
+  participant "RuleRegistry\n«bootstrap»" as R
+  participant "RoundClosingService\n«domain.gameplay»" as RC
+  participant "IReglaJuego\n«HandEvaluator: plug-in de regla»\nReglaClasica | ReglaApuntado" as H
+  participant "RoundScoringComponent\n«ScoringService»" as SC
+  participant "GameSession\n«agregado»" as G
+  participant "IGameRepository\n«MongoGameRepository»" as REPO
+  participant "IAuditTrail /\nIRealtimePublisher" as OUT
+end box
+database "MongoDB\ngame_sessions" as DB
+
+J -> UI : clic «Intentar cierre»\n(fase DISCARD, 10 cartas tras descartar)
+UI -> C : POST /api/games/{gameId}/close\n{playerId, commandId}
+activate C
+C -> S : closeRound(gameId, playerId, commandId)
+activate S
+
+S -> REPO : receipt(gameId, commandId)
+REPO -> DB : findOne({_id, "receipts.commandId"})
+DB --> REPO : null
+REPO --> S : Optional.empty()
+note right of S : Si el recibo existe y coincide autor + hash → REPLAY\n(se devuelve el estado sin volver a liquidar).\nSi no coincide → CommandConflictException (409).
+
+S -> REPO : findById(gameId)
+REPO -> DB : findById(gameId)
+DB --> REPO : Document (version = v)
+REPO --> S : GameSession v
+
+S -> O : closeRound(session, playerId)
+activate O
+O -> R : get(session.variantId())
+R --> O : IReglaJuego (cargada por ServiceLoader)
+O -> RC : attemptClose(session, playerId, rule)
+activate RC
+RC -> H : permiteCerrar(new Hand(10 cartas))
+
+alt Escenario 1 — Modalidad Clásica (variantId = CLASICA)
+  H -> H : Groups.matches(cartas, {4,3,3}, maxSobrante = 0)
+  H --> RC : true — 1 cuarta + 2 ternas;\nel descarte ya se hizo en el paso previo (DISCARD)
+  loop por cada jugador de la ronda
+    RC -> SC : penalty(hand, esQuienCierra)
+    SC --> RC : 0 para quien cierra · suma de la mano para los demás
+    RC -> SC : accumulate(totalActual, penalización)
+    SC --> RC : nuevo total
+  end
+  RC -> H : terminaPartidaAlCerrar()
+  H --> RC : true
+  RC -> G : closeRound(playerId, totales, resultados,\nendsGame = true, siguienteBaraja)
+  activate G
+  G --> RC : GameSession v+1 · status = FINISHED,\nwinnerId = quien cerró → <b>ronda y partida ganadas</b>
+  deactivate G
+
+else Escenario 2 — Modalidad Apuntado (variantId = APUNTADO101)
+  H -> H : Groups.matches(cartas, {3,3,3}, maxSobrante = 4)
+  H --> RC : true — 3 ternas disjuntas + sobrante < 5 pts
+  loop por cada jugador de la ronda (liquidación de penalizaciones)
+    RC -> SC : penalty(hand, esQuienCierra)
+    SC --> RC : 0 para quien cierra · todas sus cartas para los demás
+    RC -> SC : accumulate(totalActual, penalización)
+    SC --> RC : total acumulado entre rondas
+  end
+  RC -> H : terminaPartidaAlCerrar()
+  H --> RC : false
+  RC -> G : closeRound(playerId, totales, resultados,\nendsGame = false, siguienteBaraja)
+  activate G
+  G -> G : activePlayers(): PlayerScore.eliminated()\n⇔ total ≥ 101
+  alt queda un solo jugador activo
+    G --> RC : GameSession v+1 · FINISHED · winnerId = quien cerró\n(los demás alcanzaron ≥ 101) → <b>fin de partida</b>
+  else quedan dos o más jugadores activos
+    G -> G : RoundState.open(ronda + 1, activos, baraja)\nturno → siguiente jugador activo
+    G --> RC : GameSession v+1 · ACTIVE · nueva ronda repartida
+  end
+  deactivate G
+
+else Mano inválida (cualquier modalidad)
+  H --> RC : false
+  RC --> O : IllegalArgumentException\n"Cierre inválido: se requiere " + descripcionCierre()
+  O --> S : excepción
+  S -> OUT : record(outcome = REJECTED, detalle, latencia)
+  S --> C : excepción
+  C --> UI : 400 {error: "Cierre inválido: se requiere …"}
+  UI --> J : mensaje explicativo; el estado no cambia
+end
+
+RC --> O : GameSession v+1 (escenarios 1 y 2)
+deactivate RC
+O --> S : GameSession v+1
+deactivate O
+
+S -> REPO : save(previous v, updated v+1, CommandReceipt)
+activate REPO
+REPO -> DB : updateFirst({_id, version: v},\n$set estado completo, $push receipts)
+alt matchedCount = 1 (commit atómico del agregado)
+  DB --> REPO : ok
+  REPO --> S : ok
+else matchedCount = 0 (otro cierre ganó la carrera)
+  DB --> REPO : 0 documentos
+  REPO --> S : OptimisticLockException
+  S -> REPO : receipt(gameId, commandId)
+  note right of S : Reintento ya aplicado → REPLAY;\nsi no → 409 y no hay liquidación doble
+end
+deactivate REPO
+
+S -> OUT : record(outcome = OK, "closer=… results=p2:+66=66 status=…")
+S -> OUT : publish(gameId, ROUND_CLOSED, una vista por jugador)
+note right of OUT : Notificación posterior al commit (ADR-05):\ncada WebSocket recibe solo la mano de su jugador.\nUn fallo de publicación no revierte el cierre.
+S --> C : GameView (vista autorizada del jugador)
+deactivate S
+C --> UI : 200 OK + GameView
+deactivate C
+UI --> J : resultados de la ronda, totales acumulados,\nganador o nueva ronda
+@enduml

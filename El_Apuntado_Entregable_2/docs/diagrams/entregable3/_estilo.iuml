@@ -1,0 +1,12 @@
+skinparam defaultFontName Helvetica
+skinparam defaultFontSize 12
+skinparam shadowing false
+skinparam roundCorner 8
+skinparam ArrowColor #2F3E36
+skinparam ArrowFontSize 11
+skinparam NoteBackgroundColor #FFF8DC
+skinparam NoteBorderColor #C9A227
+skinparam TitleFontSize 16
+skinparam TitleFontStyle bold
+skinparam LegendBackgroundColor #F6F2E7
+skinparam LegendBorderColor #9AA79C

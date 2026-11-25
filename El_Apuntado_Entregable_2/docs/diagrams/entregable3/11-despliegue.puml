@@ -1,0 +1,66 @@
+@startuml 11-despliegue
+!include _estilo.iuml
+title Diagrama UML de Despliegue — El Apuntado MVP (docker compose)
+left to right direction
+skinparam nodeBackgroundColor #F6F2E7
+skinparam nodeBorderColor #2F3E36
+skinparam artifactBackgroundColor #FFFFFF
+skinparam databaseBackgroundColor #E9F1E4
+
+node "Dispositivo del jugador\n(PC, portátil o móvil)" as device <<device>> {
+  node "Navegador web\n(Chrome / Edge / Safari / Firefox)" as browser <<executionEnvironment>> {
+    artifact "index.html\napp.js\nstyles.css" as bundle <<bundle JS/HTML>>
+  }
+}
+
+node "Equipo servidor (host Docker)\nred bridge: el_apuntado_entregable_2_default" as host <<device>> {
+  node "Contenedor apuntado-app\nimagen el-apuntado:latest\n(eclipse-temurin:17-jre)" as appc <<container>> {
+    node "JVM 17 + Tomcat embebido\n:8080" as jvm <<executionEnvironment>> {
+      artifact "arquitectura-entregable2-1.0.0.jar\n(Spring Boot 3.3.5, monolito modular)" as jar <<jar>>
+      component "presentation\n(GameController)" as pres
+      component "realtime\n(GameWebSocketHandler)" as rt
+      component "application\n(GameApplicationService,\nTurnOrchestratorComponent)" as app
+      component "domain + rules\n(IReglaJuego: Clásica | Apuntado)" as dom
+      component "persistence.mongo\n(MongoGameRepository)" as per
+      component "audit\n(JsonLinesAuditTrail)" as aud
+    }
+  }
+  artifact "./logs/audit.jsonl" as auditfile <<file, bind mount>>
+  node "Contenedor apuntado-mongo\nimagen mongo:7" as mongoc <<container>> {
+    database "MongoDB 7\n:27017\nBD apuntado\ncolección game_sessions" as mongo
+  }
+  artifact "volumen mongo-data\n(/data/db)" as vol <<volume>>
+}
+
+node "GitHub Actions\n(ubuntu-latest)" as ci <<device>> {
+  artifact ".github/workflows/quality.yml\njobs: verify · integration · release" as wf <<pipeline>>
+}
+
+browser --> jvm : HTTP/1.1 REST + JSON\nGET /, GET/POST /api/** (puerto 8080)
+browser <--> jvm : WebSocket\nws://host:8080/ws/games?gameId&playerId
+pres ..> app : IPC en memoria\n(llamada síncrona)
+rt ..> app : IRealtimePublisher
+app ..> dom : IPC en memoria
+app ..> per : IGameRepository
+app ..> aud : IAuditTrail
+per --> mongo : MongoDB Wire Protocol / TCP 27017\n(driver sync 5.0.1, updateFirst con filtro de versión)
+aud --> auditfile : 1 línea JSON por comando
+mongo --> vol : persistencia
+ci ..> host : construye la imagen y\nejecuta smoke test\n(docker compose up --build --wait)
+
+note bottom of jvm
+  Perfil <b>mongo</b> (docker compose): SPRING_PROFILES_ACTIVE=mongo,
+  SPRING_DATA_MONGODB_URI=mongodb://mongo:27017.
+  Perfil por defecto (./mvnw spring-boot:run): InMemoryGameRepository, sin MongoDB.
+  APUNTADO_DECK=random (usuarios) | demo (sustentación).
+  Healthcheck: TCP 127.0.0.1:8080 cada 10 s.
+end note
+
+legend right
+  <b>Un proceso de aplicación + una base de datos</b> (ADR-01):
+  todos los módulos se comunican en memoria dentro de la JVM;
+  solo hay red entre navegador ↔ app (HTTP/WS) y app ↔ MongoDB (TCP).
+  Modo multi-dispositivo: cada navegador abre /?game={id}&player={pX};
+  en red local se usa la IP del equipo servidor.
+endlegend
+@enduml

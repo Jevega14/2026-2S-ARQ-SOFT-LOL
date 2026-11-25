@@ -1,0 +1,229 @@
+@startuml 13a-clases-dominio
+!include _estilo.iuml
+title Diagrama UML de Clases de Implementación (1/2) — Dominio y motor de reglas (Strategy + ServiceLoader)
+skinparam classAttributeIconSize 0
+skinparam classFontStyle bold
+skinparam classBackgroundColor #FFFFFF
+skinparam classBorderColor #2F3E36
+skinparam packageBackgroundColor #F6F2E7
+skinparam packageBorderColor #9AA79C
+hide empty members
+left to right direction
+
+package "com.apuntado.domain.rules.api" <<Rectangle>> {
+  interface IReglaJuego <<Strategy>> {
+    + id() : String
+    + permiteCerrar(hand : Hand) : boolean
+    + terminaPartidaAlCerrar() : boolean {default: false}
+    + descripcionCierre() : String {default}
+  }
+}
+
+package "com.apuntado.domain.rules.clasica" <<Rectangle>> {
+  class ReglaClasica <<final>> {
+    - {static} GRUPOS : int[] = {4, 3, 3}
+    + id() : String = "CLASICA"
+    + permiteCerrar(hand : Hand) : boolean
+    + terminaPartidaAlCerrar() : boolean = true
+    + descripcionCierre() : String
+  }
+}
+
+package "com.apuntado.domain.rules.apuntado" <<Rectangle>> {
+  class ReglaApuntado <<final>> {
+    - {static} GRUPOS : int[] = {3, 3, 3}
+    - {static} SOBRANTE_MAXIMO : int = 4
+    + id() : String = "APUNTADO101"
+    + permiteCerrar(hand : Hand) : boolean
+    + descripcionCierre() : String
+  }
+}
+
+package "com.apuntado.domain.rules.common" <<Rectangle>> {
+  class Groups <<utility>> {
+    - Groups()
+    + {static} valid(group : List<Card>) : boolean
+    + {static} matches(cards : List<Card>, sizes : int[], maxRemainder : int) : boolean
+    - {static} sameRank(group : List<Card>) : boolean
+    - {static} run(group : List<Card>) : boolean
+    - {static} assign(cards : List<Card>, sizes : int[], index : int, max : int) : boolean
+    - {static} combinations(cards : List<Card>, size : int) : List<List<Card>>
+    - {static} collect(cards, size, start, chosen, result) : void
+  }
+  note bottom of Groups
+    <b>Evaluación combinatoria</b> (backtracking):
+    para cada tamaño de grupo prueba C(n, k) combinaciones,
+    valida trío/cuarta (mismo rango, palos distintos) o escalera
+    (mismo palo, consecutiva, As bajo) y recursa con las cartas restantes.
+    Acepta si el sobrante suma ≤ maxRemainder. Máx. CC por método ≤ 10.
+  end note
+}
+
+package "com.apuntado.bootstrap" <<Rectangle>> {
+  class RuleRegistry <<final>> {
+    - rules : Map<String, IReglaJuego>
+    + RuleRegistry()
+    + get(id : String) : IReglaJuego
+    + ids() : List<String>
+  }
+  note bottom of RuleRegistry
+    Descubre proveedores con
+    ServiceLoader.load(IReglaJuego.class)
+    (META-INF/services). Rechaza ids duplicados.
+  end note
+}
+
+package "com.apuntado.domain.gameplay" <<Rectangle>> {
+  class HandEvaluatorComponent <<final>> {
+    + canClose(hand : Hand, rule : IReglaJuego) : boolean
+  }
+  class RoundClosingService <<final>> {
+    - scoring : RoundScoringComponent
+    - decks : Supplier<List<Card>>
+    + RoundClosingService(scoring : RoundScoringComponent)
+    + RoundClosingService(scoring : RoundScoringComponent, decks : Supplier<List<Card>>)
+    + attemptClose(session : GameSession, playerId : String, rule : IReglaJuego) : GameSession
+    - updatedScore(session, player : PlayerSeat, closerId : String) : PlayerScore
+    - roundScore(session, player, closerId, totals : List<PlayerScore>) : RoundScore
+    - {static} participates(session, playerId) : boolean
+    - {static} handOf(session, playerId) : Hand
+  }
+}
+
+package "com.apuntado.domain.scoring" <<Rectangle>> {
+  class RoundScoringComponent <<final>> {
+    + penalty(hand : Hand, closer : boolean) : int
+    + accumulate(current : int, penalty : int) : int
+    + reachedLimit(score : int) : boolean  // score >= 101
+  }
+}
+
+package "com.apuntado.domain.model" <<Rectangle>> {
+  class GameSession <<record, aggregate root>> {
+    - id : String
+    - variantId : String
+    - players : List<PlayerSeat>
+    - currentRound : int
+    - round : RoundState
+    - turn : TurnState
+    - status : GameStatus
+    - version : int
+    - totals : List<PlayerScore>
+    - completedRounds : List<RoundState>
+    - winnerId : String
+    + {static} start(id, variantId, players : List<PlayerSeat>, deck : List<Card>) : GameSession
+    + drawFromDeck(playerId : String) : GameSession
+    + drawFromDiscard(playerId : String) : GameSession
+    + discard(playerId : String, cardId : String) : GameSession
+    + endTurn(playerId : String) : GameSession
+    + closeRound(playerId, updatedTotals : List<PlayerScore>, results : List<RoundScore>, endsGame : boolean, nextDeck : List<Card>) : GameSession
+    + scoreOf(playerId : String) : PlayerScore
+    - requireTurn(playerId : String, expectedPhase : TurnPhase) : void
+    - nextActiveAfter(playerId, scores) : PlayerSeat
+    - {static} validateActiveState(...) : void
+    - {static} validateFinishedState(...) : void
+  }
+  class RoundState <<record>> {
+    - number : int
+    - hands : List<PlayerHandState>
+    - deck : List<Card>
+    - discard : List<Card>
+    - status : RoundStatus
+    - closedBy : String
+    - scores : List<RoundScore>
+    + {static} open(number : int, players : List<PlayerSeat>, cards : List<Card>) : RoundState
+    + handOf(playerId : String) : PlayerHandState
+    + drawFromDeck(playerId : String) : RoundState
+    + drawFromDiscard(playerId : String) : RoundState
+    + reshuffleDiscard() : RoundState
+    + discard(playerId : String, cardId : String) : RoundState
+    + close(playerId : String, results : List<RoundScore>) : RoundState
+    - {static} validateCards(hands, deck, discard) : void  // 52 cartas únicas
+  }
+  class PlayerHandState <<record>> {
+    - playerId : String
+    - cards : List<Card>
+    + add(card : Card) : PlayerHandState
+    + remove(cardId : String) : PlayerHandState
+    + card(cardId : String) : Card
+  }
+  class Hand <<record>> {
+    - cards : List<Card>  // exactamente 10, sin repetidas
+  }
+  class Card <<record>> {
+    - id : String
+    - rank : int  // 1..13
+    - suit : String  // H D S C
+    - points : int  // mín. entre rank y 10
+  }
+  class PlayerSeat <<record>> {
+    - playerId : String
+    - seat : int
+    - displayName : String
+  }
+  class PlayerScore <<record>> {
+    - playerId : String
+    - total : int
+    + eliminated() : boolean  // total >= 101
+  }
+  class RoundScore <<record>> {
+    - playerId : String
+    - penalty : int
+    - totalAfter : int
+  }
+  class TurnState <<record>> {
+    - playerId : String
+    - number : int
+    - phase : TurnPhase
+  }
+  class StandardDeck <<final>> {
+    + {static} shuffled() : List<Card>
+  }
+  enum GameStatus {
+    WAITING
+    ACTIVE
+    FINISHED
+  }
+  enum RoundStatus {
+    OPEN
+    CLOSED
+  }
+  enum TurnPhase {
+    DRAW
+    DISCARD
+    CLOSED
+  }
+}
+
+IReglaJuego <|.. ReglaClasica
+IReglaJuego <|.. ReglaApuntado
+ReglaClasica ..> Groups : «use»
+ReglaApuntado ..> Groups : «use»
+RuleRegistry o--> "1..*" IReglaJuego : proveedores
+HandEvaluatorComponent ..> IReglaJuego : delega
+RoundClosingService ..> IReglaJuego : permiteCerrar()\nterminaPartidaAlCerrar()
+RoundClosingService --> "1" RoundScoringComponent
+RoundClosingService ..> GameSession : closeRound()
+IReglaJuego ..> Hand
+GameSession *-- "1" RoundState : round
+GameSession *-- "0..*" RoundState : completedRounds
+GameSession *-- "2..4" PlayerSeat
+GameSession *-- "2..4" PlayerScore : totals
+GameSession *-- "1" TurnState
+GameSession --> GameStatus
+RoundState *-- "2..4" PlayerHandState
+RoundState o-- "52" Card : deck + discard + hands
+RoundState *-- "0..4" RoundScore
+RoundState --> RoundStatus
+TurnState --> TurnPhase
+PlayerHandState o-- "*" Card
+Hand o-- "10" Card
+StandardDeck ..> Card : crea 52
+
+legend bottom
+  Visibilidad: <b>+</b> público · <b>-</b> privado · <b>#</b> protegido (no se usa: no hay herencia de implementación).
+  Records de Java: los campos son privados y finales con accesores públicos homónimos (id(), rank()…), omitidos por brevedad.
+  Todas las clases mostradas están <b>implementadas</b> en el MVP (rama entregable3/fase1-mvp).
+  Fitness functions: clasica ↛ apuntado, apuntado ↛ clasica; domain no depende de ningún otro módulo (Ce = 0).
+endlegend
+@enduml
