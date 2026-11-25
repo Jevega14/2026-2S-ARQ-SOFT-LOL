@@ -21,6 +21,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
  */
 @Component
 public class GameWebSocketHandler extends TextWebSocketHandler {
+ private static final System.Logger LOGGER = System.getLogger(GameWebSocketHandler.class.getName());
  private static final String KEY_ATTRIBUTE = "apuntado.sessionKey";
  private final Map<String, Set<WebSocketSession>> sessions = new ConcurrentHashMap<>();
 
@@ -56,6 +57,8 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
     session.sendMessage(new TextMessage(payload));
    }
   } catch (IOException exception) {
+   // Conexión rota: se descarta la sesión; el cliente se recupera con GET /api/games/{id} al reconectar.
+   LOGGER.log(System.Logger.Level.INFO, "Se cierra una sesión WebSocket que no aceptó el mensaje", exception);
    remove(session);
   }
  }

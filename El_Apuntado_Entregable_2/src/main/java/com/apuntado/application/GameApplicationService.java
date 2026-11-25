@@ -172,6 +172,8 @@ public final class GameApplicationService {
   try {
    return repository.findById(gameId).orElse(null);
   } catch (RuntimeException unavailable) {
+   // La auditoría de un rechazo no debe ocultar el error original: se registra y se audita sin contexto.
+   LOGGER.log(System.Logger.Level.WARNING, "No se pudo leer el contexto de auditoría de " + gameId, unavailable);
    return null;
   }
  }

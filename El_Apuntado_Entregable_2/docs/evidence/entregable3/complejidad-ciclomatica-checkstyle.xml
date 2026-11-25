@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="10.21.1">
+<file name="/work/src/main/java/com/apuntado/application/command/CreateGameCommand.java">
+<error line="6" column="2" severity="error" message="Cyclomatic Complexity is 2 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+</file>
+<file name="/work/src/main/java/com/apuntado/application/command/PlayerInput.java">
+</file>
+<file name="/work/src/main/java/com/apuntado/application/GameApplicationService.java">
+<error line="145" column="2" severity="error" message="Cyclomatic Complexity is 2 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="155" column="2" severity="error" message="Cyclomatic Complexity is 3 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="171" column="2" severity="error" message="Cyclomatic Complexity is 2 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="179" column="2" severity="error" message="Cyclomatic Complexity is 3 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="191" column="2" severity="error" message="Cyclomatic Complexity is 3 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="197" column="2" severity="error" message="Cyclomatic Complexity is 2 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="207" column="2" severity="error" message="Cyclomatic Complexity is 4 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="224" column="2" severity="error" message="Cyclomatic Complexity is 2 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="246" column="2" severity="error" message="Cyclomatic Complexity is 2 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="256" column="2" severity="error" message="Cyclomatic Complexity is 2 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="261" column="2" severity="error" message="Cyclomatic Complexity is 2 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="268" column="2" severity="error" message="Cyclomatic Complexity is 2 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="278" column="2" severity="error" message="Cyclomatic Complexity is 5 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="294" column="2" severity="error" message="Cyclomatic Complexity is 3 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="299" column="2" severity="error" message="Cyclomatic Complexity is 2 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="313" column="2" severity="error" message="Cyclomatic Complexity is 2 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="322" column="2" severity="error" message="Cyclomatic Complexity is 3 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+</file>
+<file name="/work/src/main/java/com/apuntado/application/CommandConflictException.java">
+</file>
+<file name="/work/src/main/java/com/apuntado/application/DuplicateGameException.java">
+</file>
+<file name="/work/src/main/java/com/apuntado/application/OptimisticLockException.java">
+</file>
+<file name="/work/src/main/java/com/apuntado/application/TurnOrchestratorComponent.java">
+</file>
+<file name="/work/src/main/java/com/apuntado/application/GameNotFoundException.java">
+</file>
+<file name="/work/src/main/java/com/apuntado/application/port/AuditEntry.java">
+</file>
+<file name="/work/src/main/java/com/apuntado/application/port/IGameRepository.java">
+</file>
+<file name="/work/src/main/java/com/apuntado/application/port/IAuditTrail.java">
+</file>
+<file name="/work/src/main/java/com/apuntado/application/port/IRealtimePublisher.java">
+</file>
+<file name="/work/src/main/java/com/apuntado/application/port/CommandReceipt.java">
+<error line="11" column="2" severity="error" message="Cyclomatic Complexity is 2 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="18" column="2" severity="error" message="Cyclomatic Complexity is 3 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+</file>
+<file name="/work/src/main/java/com/apuntado/application/view/RoundResultView.java">
+</file>
+<file name="/work/src/main/java/com/apuntado/application/view/VariantView.java">
+</file>
+<file name="/work/src/main/java/com/apuntado/application/view/TurnView.java">
+</file>
+<file name="/work/src/main/java/com/apuntado/application/view/PlayerView.java">
+</file>
+<file name="/work/src/main/java/com/apuntado/application/view/GameView.java">
+</file>
+<file name="/work/src/main/java/com/apuntado/application/view/CardView.java">
+</file>
+<file name="/work/src/main/java/com/apuntado/presentation/GameController.java">
+</file>
+<file name="/work/src/main/java/com/apuntado/presentation/ApiExceptionHandler.java">
+</file>
+<file name="/work/src/main/java/com/apuntado/presentation/dto/CreatePlayerRequest.java">
+</file>
+<file name="/work/src/main/java/com/apuntado/presentation/dto/DiscardRequest.java">
+</file>
+<file name="/work/src/main/java/com/apuntado/presentation/dto/PlayerActionRequest.java">
+</file>
+<file name="/work/src/main/java/com/apuntado/presentation/dto/CreateGameRequest.java">
+</file>
+<file name="/work/src/main/java/com/apuntado/presentation/dto/ApiError.java">
+</file>
+<file name="/work/src/main/java/com/apuntado/config/ApplicationConfig.java">
+<error line="44" column="2" severity="error" message="Cyclomatic Complexity is 3 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+</file>
+<file name="/work/src/main/java/com/apuntado/config/MongoConfig.java">
+</file>
+<file name="/work/src/main/java/com/apuntado/config/DemoDeckSupplier.java">
+</file>
+<file name="/work/src/main/java/com/apuntado/realtime/RealtimeConfig.java">
+</file>
+<file name="/work/src/main/java/com/apuntado/realtime/GameEventMessage.java">
+</file>
+<file name="/work/src/main/java/com/apuntado/realtime/WebSocketRealtimePublisher.java">
+<error line="20" column="2" severity="error" message="Cyclomatic Complexity is 2 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="27" column="2" severity="error" message="Cyclomatic Complexity is 2 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+</file>
+<file name="/work/src/main/java/com/apuntado/realtime/GameWebSocketHandler.java">
+<error line="27" column="2" severity="error" message="Cyclomatic Complexity is 3 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="46" column="2" severity="error" message="Cyclomatic Complexity is 2 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="52" column="2" severity="error" message="Cyclomatic Complexity is 3 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="63" column="2" severity="error" message="Cyclomatic Complexity is 4 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="76" column="2" severity="error" message="Cyclomatic Complexity is 2 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="80" column="2" severity="error" message="Cyclomatic Complexity is 5 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+</file>
+<file name="/work/src/main/java/com/apuntado/ElApuntadoApplication.java">
+</file>
+<file name="/work/src/main/java/com/apuntado/persistence/mongo/GameSessionMapper.java">
+<error line="153" column="2" severity="error" message="Cyclomatic Complexity is 2 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="158" column="2" severity="error" message="Cyclomatic Complexity is 2 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+</file>
+<file name="/work/src/main/java/com/apuntado/persistence/mongo/MongoGameRepository.java">
+<error line="34" column="2" severity="error" message="Cyclomatic Complexity is 3 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="41" column="2" severity="error" message="Cyclomatic Complexity is 2 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="53" column="2" severity="error" message="Cyclomatic Complexity is 3 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="68" column="2" severity="error" message="Cyclomatic Complexity is 4 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="88" column="2" severity="error" message="Cyclomatic Complexity is 2 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="95" column="2" severity="error" message="Cyclomatic Complexity is 2 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+</file>
+<file name="/work/src/main/java/com/apuntado/persistence/InMemoryGameRepository.java">
+<error line="23" column="2" severity="error" message="Cyclomatic Complexity is 3 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="29" column="2" severity="error" message="Cyclomatic Complexity is 2 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="35" column="2" severity="error" message="Cyclomatic Complexity is 4 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="50" column="2" severity="error" message="Cyclomatic Complexity is 3 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+</file>
+<file name="/work/src/main/java/com/apuntado/bootstrap/RuleRegistry.java">
+<error line="6" column="2" severity="error" message="Cyclomatic Complexity is 4 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="12" column="2" severity="error" message="Cyclomatic Complexity is 2 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+</file>
+<file name="/work/src/main/java/com/apuntado/audit/JsonLinesAuditTrail.java">
+<error line="38" column="2" severity="error" message="Cyclomatic Complexity is 2 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="42" column="2" severity="error" message="Cyclomatic Complexity is 5 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+</file>
+<file name="/work/src/main/java/com/apuntado/domain/scoring/RoundScoringComponent.java">
+<error line="5" column="2" severity="error" message="Cyclomatic Complexity is 2 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="9" column="2" severity="error" message="Cyclomatic Complexity is 3 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+</file>
+<file name="/work/src/main/java/com/apuntado/domain/gameplay/RoundClosingService.java">
+<error line="33" column="2" severity="error" message="Cyclomatic Complexity is 3 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="46" column="2" severity="error" message="Cyclomatic Complexity is 2 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="53" column="2" severity="error" message="Cyclomatic Complexity is 2 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+</file>
+<file name="/work/src/main/java/com/apuntado/domain/gameplay/HandEvaluatorComponent.java">
+</file>
+<file name="/work/src/main/java/com/apuntado/domain/rules/apuntado/ReglaApuntado.java">
+</file>
+<file name="/work/src/main/java/com/apuntado/domain/rules/api/IReglaJuego.java">
+</file>
+<file name="/work/src/main/java/com/apuntado/domain/rules/common/Groups.java">
+<error line="7" column="2" severity="error" message="Cyclomatic Complexity is 2 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="8" column="2" severity="error" message="Cyclomatic Complexity is 2 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="12" column="2" severity="error" message="Cyclomatic Complexity is 4 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="23" column="2" severity="error" message="Cyclomatic Complexity is 5 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="37" column="2" severity="error" message="Cyclomatic Complexity is 3 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+</file>
+<file name="/work/src/main/java/com/apuntado/domain/rules/clasica/ReglaClasica.java">
+</file>
+<file name="/work/src/main/java/com/apuntado/domain/model/GameSession.java">
+<error line="19" column="2" severity="error" message="Cyclomatic Complexity is 10 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="66" column="2" severity="error" message="Cyclomatic Complexity is 2 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="72" column="2" severity="error" message="Cyclomatic Complexity is 2 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="89" column="2" severity="error" message="Cyclomatic Complexity is 4 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="116" column="2" severity="error" message="Cyclomatic Complexity is 2 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="121" column="2" severity="error" message="Cyclomatic Complexity is 3 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="134" column="2" severity="error" message="Cyclomatic Complexity is 6 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="142" column="2" severity="error" message="Cyclomatic Complexity is 6 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="150" column="2" severity="error" message="Cyclomatic Complexity is 4 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="157" column="2" severity="error" message="Cyclomatic Complexity is 3 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="163" column="2" severity="error" message="Cyclomatic Complexity is 3 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="170" column="2" severity="error" message="Cyclomatic Complexity is 6 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+</file>
+<file name="/work/src/main/java/com/apuntado/domain/model/StandardDeck.java">
+<error line="10" column="2" severity="error" message="Cyclomatic Complexity is 3 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+</file>
+<file name="/work/src/main/java/com/apuntado/domain/model/Card.java">
+<error line="4" column="2" severity="error" message="Cyclomatic Complexity is 6 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+</file>
+<file name="/work/src/main/java/com/apuntado/domain/model/Hand.java">
+<error line="4" column="2" severity="error" message="Cyclomatic Complexity is 3 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+</file>
+<file name="/work/src/main/java/com/apuntado/domain/model/PlayerScore.java">
+<error line="6" column="2" severity="error" message="Cyclomatic Complexity is 3 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+</file>
+<file name="/work/src/main/java/com/apuntado/domain/model/GameStatus.java">
+</file>
+<file name="/work/src/main/java/com/apuntado/domain/model/TurnPhase.java">
+</file>
+<file name="/work/src/main/java/com/apuntado/domain/model/RoundStatus.java">
+</file>
+<file name="/work/src/main/java/com/apuntado/domain/model/PlayerHandState.java">
+<error line="8" column="2" severity="error" message="Cyclomatic Complexity is 3 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="33" column="2" severity="error" message="Cyclomatic Complexity is 3 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+</file>
+<file name="/work/src/main/java/com/apuntado/domain/model/RoundScore.java">
+<error line="6" column="2" severity="error" message="Cyclomatic Complexity is 4 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+</file>
+<file name="/work/src/main/java/com/apuntado/domain/model/RoundState.java">
+<error line="17" column="2" severity="error" message="Cyclomatic Complexity is 3 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="31" column="2" severity="error" message="Cyclomatic Complexity is 4 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="53" column="2" severity="error" message="Cyclomatic Complexity is 2 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="62" column="2" severity="error" message="Cyclomatic Complexity is 2 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="69" column="2" severity="error" message="Cyclomatic Complexity is 2 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="85" column="2" severity="error" message="Cyclomatic Complexity is 3 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="93" column="2" severity="error" message="Cyclomatic Complexity is 3 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="100" column="2" severity="error" message="Cyclomatic Complexity is 3 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+</file>
+<file name="/work/src/main/java/com/apuntado/domain/model/PlayerSeat.java">
+<error line="6" column="2" severity="error" message="Cyclomatic Complexity is 4 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+</file>
+<file name="/work/src/main/java/com/apuntado/domain/model/TurnState.java">
+<error line="6" column="2" severity="error" message="Cyclomatic Complexity is 3 (max allowed is 1)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+</file>
+<file name="/work/src/main/resources/application-mongo.properties">
+</file>
+<file name="/work/src/main/resources/application.properties">
+</file>
+</checkstyle>

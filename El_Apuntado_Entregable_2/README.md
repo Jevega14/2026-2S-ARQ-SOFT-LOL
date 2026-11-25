@@ -183,6 +183,10 @@ ejecuta workflows ubicados ahí). Corre en cada `push` y `pull_request`:
 3. `release`: construye la imagen con `docker compose`, levanta el stack y hace
    un smoke test de la API.
 
+## Informe del Entregable 3
+
+[`docs/informe/`](docs/informe/) contiene el documento consolidado (DOCX editable y PDF).
+
 ## Validación con usuarios
 
 El kit está en [`docs/validacion/`](docs/validacion/README.md): protocolo, consentimiento, hoja de

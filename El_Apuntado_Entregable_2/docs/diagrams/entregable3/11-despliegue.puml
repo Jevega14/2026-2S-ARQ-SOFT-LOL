@@ -1,7 +1,6 @@
 @startuml 11-despliegue
 !include _estilo.iuml
 title Diagrama UML de Despliegue — El Apuntado MVP (docker compose)
-left to right direction
 skinparam nodeBackgroundColor #F6F2E7
 skinparam nodeBorderColor #2F3E36
 skinparam artifactBackgroundColor #FFFFFF
@@ -46,7 +45,7 @@ app ..> aud : IAuditTrail
 per --> mongo : MongoDB Wire Protocol / TCP 27017\n(driver sync 5.0.1, updateFirst con filtro de versión)
 aud --> auditfile : 1 línea JSON por comando
 mongo --> vol : persistencia
-ci ..> host : construye la imagen y\nejecuta smoke test\n(docker compose up --build --wait)
+ci ..> host : construye la imagen y\nejecuta smoke test\n(docker compose up ~--build ~--wait)
 
 note bottom of jvm
   Perfil <b>mongo</b> (docker compose): SPRING_PROFILES_ACTIVE=mongo,
