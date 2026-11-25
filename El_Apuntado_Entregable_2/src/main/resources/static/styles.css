@@ -138,9 +138,50 @@ tr.active-player td { background: #fdf3cf; font-weight: 700; }
 .playing-card .rank { font-size: 20px; }
 .playing-card .points { font-size: 11px; color: var(--muted); align-self: flex-end; }
 .playing-card.red { color: #b23a3a; }
+.playing-card.new-card { border: 2px solid #256b3a; box-shadow: 0 0 0 3px #b8dfc4; }
 
 .results { margin-top: 12px; font-size: 14px; }
 .results h3 { margin-bottom: 6px; }
+
+button.small { padding: 6px 10px; font-size: 12px; }
+
+.rule-banner {
+  background: #e9f1e4;
+  border-left: 4px solid #256b3a;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.invite { margin: 8px 0 12px; font-size: 14px; }
+.invite summary { cursor: pointer; font-weight: 600; }
+.invite code, .invite a { word-break: break-all; }
+
+.hand-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.handoff {
+  background: #1d2a22;
+  color: var(--panel);
+  border-radius: 10px;
+  padding: 18px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.handoff p { font-size: 17px; font-weight: 700; margin: 0 0 10px; }
+
+.winner-banner {
+  background: var(--accent);
+  color: #201a02;
+  border-radius: 8px;
+  padding: 10px 14px;
+}
 
 @media (max-width: 720px) {
   .table-grid { grid-template-columns: 1fr; }

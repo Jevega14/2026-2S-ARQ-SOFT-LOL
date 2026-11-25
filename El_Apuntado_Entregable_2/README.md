@@ -1,55 +1,90 @@
 # El Apuntado — MVP del Entregable 3
 
-MVP web jugable de El Apuntado sobre un monolito modular. Implementa las dos
-modalidades (Clásica 4-3-3 y Apuntado a 101), el flujo completo de turnos y la
-liquidación de rondas. La persistencia se elige por perfil: repositorio en
-memoria por defecto y adaptador MongoDB con control de concurrencia optimista e
-idempotencia por comando (ADR-04).
+MVP web jugable de El Apuntado sobre un monolito modular (Spring Boot + MongoDB).
+Implementa las dos modalidades —**Clásica 4-3-3** (una sola ronda) y **Apuntado a
+101** (rondas con acumulación y eliminación)—, el flujo completo de turnos, la
+liquidación de rondas, idempotencia por comando, control de concurrencia
+optimista (ADR-04) y un registro de auditoría por comando.
 
-Java 17 mínimo. Las dependencias están fijadas en `pom.xml` y el repositorio
-incluye Maven Wrapper con Maven 3.9.16.
+Java 17. Las dependencias están fijadas en `pom.xml` y el repositorio incluye
+Maven Wrapper (Maven 3.9.16).
 
-## Ejecución local
+## Ejecución en un comando (recomendado)
 
-```bash
-./mvnw clean verify
-./mvnw spring-boot:run
-```
-
-Luego abrir <http://localhost:8080>. También se puede empaquetar y ejecutar:
+Requiere Docker con Docker Compose.
 
 ```bash
-./mvnw clean package
-java -jar target/arquitectura-entregable2-1.0.0.jar
+docker compose up --build
 ```
 
-En este entorno de desarrollo el JDK, Maven y el repositorio local se guardan en
-`.tooling/` (ignorado por Git). Para compilar sin red:
+Abre <http://localhost:8080>. Se levantan dos contenedores:
+
+| Servicio | Imagen | Puerto | Rol |
+| :-- | :-- | :-- | :-- |
+| `app` | `el-apuntado:latest` (JRE 17 + `.jar`) | 8080 (HTTP + WebSocket) | API REST, interfaz web y `/ws/games` |
+| `mongo` | `mongo:7` | 27017 | Fuente de verdad, volumen `mongo-data` |
+
+El registro de auditoría queda en `./logs/audit.jsonl`. Para detener: `docker compose down`
+(agrega `-v` para borrar también las partidas).
+
+### Modo demostración (sustentación)
 
 ```bash
-JAVA_HOME="$PWD/.tooling/jdk-17.0.21.1+2" \
-./mvnw --offline --batch-mode -Dmaven.repo.local=.tooling/m2 clean verify
+APUNTADO_DECK=demo docker compose up --build
 ```
 
-## Funcionalidad del MVP
+Con `apuntado.deck=demo` el primer asiento recibe A♥ A♦ A♠ A♣ 9♥ 9♦ 9♠ J♥ J♦ J♠ en
+cada ronda: es 4-3-3 en Clásica y 3-3-3 + A (1 punto) en Apuntado. Basta robar,
+descartar la carta robada e «Intentar cierre». En Apuntado, dos o tres rondas
+bastan para que el rival supere 101. **Las pruebas con usuarios se hacen en modo
+`random` (valor por defecto).**
 
-- Creación de partidas con 2 a 4 jugadores y selección de modalidad.
-- Reparto de 10 cartas, pozo inicial y mazo estándar de 52 cartas.
-- Robo desde mazo o pozo, descarte y rotación de turnos.
-- Cierre Clásica 4-3-3 y cierre Apuntado 3-3-3 con sobrante menor que 5.
-- Liquidación: quien cierra suma 0 y cada rival suma todas sus cartas.
-- Acumulación, eliminación desde 101 puntos y ganador único.
-- Interfaz web "hot-seat" que muestra únicamente la mano del jugador activo.
-- Descubrimiento de variantes con `ServiceLoader` (`IReglaJuego` + `RuleRegistry`).
+## Ejecución sin Docker
 
-Perfil adoptado: baraja francesa de 52 cartas sin comodines, as = 1, figuras = 10,
-de 2 a 4 participantes. Apuestas fuera del MVP.
+```bash
+./mvnw clean verify          # pruebas, fitness functions, Checkstyle y JaCoCo
+./mvnw spring-boot:run       # perfil por defecto: repositorio en memoria
+```
+
+Con MongoDB local:
+
+```bash
+docker compose up -d mongo
+SPRING_PROFILES_ACTIVE=mongo ./mvnw spring-boot:run
+```
+
+## Cómo se juega
+
+1. Elige modalidad y de 2 a 4 jugadores. La pantalla muestra la condición de cierre.
+2. **Un dispositivo (modo relevo):** cuando cambia el turno aparece «Pasa el
+   dispositivo a X»; la mano solo se muestra al pulsar «Ver mi mano».
+3. **Varios dispositivos:** en «Jugar desde varios dispositivos» hay un enlace por
+   jugador (`/?game={id}&player={playerId}`). En red local reemplaza `localhost`
+   por la IP del equipo servidor. Cada navegador ve solo su mano y se actualiza
+   por WebSocket.
+4. En tu turno: roba del mazo o del pozo, ordena la mano (por palo o número; la
+   carta recién robada se resalta), descarta y luego «Terminar turno» o «Intentar
+   cierre». Un cierre inválido se rechaza explicando la regla.
+5. Recargar la página (`/?game={id}`) recupera la partida desde el servidor.
+
+## Reglas implementadas (perfil MVP1)
+
+- Baraja francesa de 52 cartas sin comodines; As = 1, 2–10 nominal, J/Q/K = 10.
+- 10 cartas por jugador; una carta inicia el pozo.
+- Grupos: mismo número con palos distintos, o escalera del mismo palo (As solo
+  bajo, sin escaleras circulares).
+- **Clásica:** tras descartar, la mano debe formar 4-3-3 sin sobrantes. El primer
+  cierre válido termina la partida.
+- **Apuntado:** tras descartar, tres ternas y una carta sobrante de **menos de 5**
+  puntos. Quien cierra suma 0; los demás suman todas sus cartas. Con **101 o más**
+  un jugador queda eliminado; gana el último en pie.
+- Si el mazo se agota, el pozo se baraja de nuevo conservando la última carta.
 
 ## API REST
 
 | Método | Ruta | Descripción |
 | :-- | :-- | :-- |
-| GET | `/api/variants` | Modalidades registradas por `ServiceLoader`. |
+| GET | `/api/variants` | Modalidades registradas (`id`, `closeRequirement`, `singleRound`). |
 | POST | `/api/games` | Crea una partida (`variantId`, `players`). |
 | GET | `/api/games/{gameId}?viewerId=` | Proyección autorizada para un jugador. |
 | POST | `/api/games/{gameId}/draw-deck` | Roba del mazo (`playerId`, `commandId`). |
@@ -58,135 +93,97 @@ de 2 a 4 participantes. Apuestas fuera del MVP.
 | POST | `/api/games/{gameId}/end-turn` | Termina el turno. |
 | POST | `/api/games/{gameId}/close` | Intenta cerrar la ronda. |
 
-Cada mutación exige un `commandId` único: repetir el mismo comando devuelve el
-estado ya aplicado sin duplicar efectos (ADR-04). La versión de la partida
-(`version`) permite rechazar escrituras obsoletas con HTTP 409.
+Códigos: `400` regla o datos inválidos (incluye cierre inválido), `404` partida
+inexistente, `409` movimiento fuera de turno, versión obsoleta o `commandId`
+reutilizado con otro contenido.
+
+Cada mutación exige un `commandId`. Se guarda un recibo con autor y hash del
+contenido en la misma escritura que el cambio: repetir el mismo comando devuelve
+el estado sin duplicar efectos; reutilizar el identificador para otra acción o
+autor se rechaza (ADR-04).
 
 ## Tiempo real (WebSocket)
-
-Tras persistir cada comando, `GameApplicationService` publica una proyección
-autorizada por jugador mediante `IRealtimePublisher` (ADR-05). El adaptador
-WebSocket escucha en:
 
 ```text
 ws://localhost:8080/ws/games?gameId={gameId}&playerId={playerId}
 ```
 
-Cada conexión recibe solo el estado de su jugador, con su propia mano y sin el
-mazo completo ni las manos rivales:
+Tras confirmar cada comando, `GameApplicationService` publica una proyección por
+jugador (ADR-05): cada conexión recibe solo su mano, sin manos rivales ni el orden
+del mazo. Si la publicación falla, el comando ya quedó confirmado y el cliente
+recupera el estado con `GET /api/games/{gameId}`.
+
+## Auditoría
+
+Cada comando (aceptado, repetido o rechazado) se registra como una línea JSON en
+`logs/audit.jsonl` (`APUNTADO_AUDIT_DIR` cambia la carpeta):
 
 ```json
-{"type":"CARD_DRAWN","state":{"gameId":"...","version":1,"viewerId":"p1",...}}
+{"at":"2026-11-25T03:20:11Z","gameId":"…","variantId":"APUNTADO101","playerId":"p2","action":"CLOSE","commandId":"…","outcome":"REJECTED","version":5,"round":2,"turn":1,"durationMicros":6721,"detail":"IllegalArgumentException: Cierre inválido: se requiere tres ternas y una carta sobrante de menos de 5 puntos"}
 ```
 
-La notificación ocurre **después** del commit. Si el publicador falla, el
-comando ya quedó confirmado y la respuesta HTTP sigue siendo válida; el cliente
-puede recuperar el estado con `GET /api/games/{gameId}`. La UI usa el evento como
-señal y solicita el snapshot REST, reconectando si cambia el jugador en turno.
-
-## Persistencia
-
-Por defecto se usa `InMemoryGameRepository`, que no requiere servicios externos.
-Para usar MongoDB:
-
-```bash
-docker compose up -d mongo
-SPRING_PROFILES_ACTIVE=mongo ./mvnw spring-boot:run
-```
-
-El perfil `mongo` activa `MongoGameRepository`, que guarda cada partida como un
-documento con rondas, manos y puntajes embebidos, aplica escrituras atómicas
-filtradas por versión, registra los `commandId` dentro del agregado y rechaza
-documentos mayores a 12 MiB. La configuración de conexión está en
-`src/main/resources/application-mongo.properties`.
-
-Pruebas de integración reales (requieren MongoDB y Docker habilitado en WSL):
-
-```bash
-docker compose up -d mongo
-APUNTADO_MONGO_IT=true ./mvnw --batch-mode test
-```
-
-Estas pruebas cubren recuperación desde otra instancia, recibos de comando y dos
-cierres concurrentes desde la misma versión (exactamente uno debe ganar).
+Es la evidencia de las sesiones con usuarios: permite calcular la tasa de cierres
+válidos, los errores de regla y la latencia del servidor por acción.
 
 ## Arquitectura
 
-- `domain.model`: entidades y agregado `GameSession`.
-- `domain.gameplay`: evaluación de manos y cierre de ronda.
-- `domain.rules.api` / `rules.clasica` / `rules.apuntado`: Strategy aislado.
+- `domain.model`: entidades y agregado `GameSession` (invariantes de cartas, turnos y puntajes).
+- `domain.gameplay`: `HandEvaluatorComponent` y `RoundClosingService` (cierre y liquidación).
+- `domain.rules.api` / `rules.clasica` / `rules.apuntado` / `rules.common`: Strategy aislado.
 - `domain.scoring`: penalizaciones, acumulación y umbral de 101.
-- `application`: casos de uso (`GameApplicationService`), comandos, vistas y el
-  puerto `IGameRepository`. No depende de Spring ni de infraestructura.
-- `persistence`: `InMemoryGameRepository` (perfil por defecto) y
-  `persistence.mongo.MongoGameRepository` con su mapeador BSON (perfil `mongo`).
+- `application`: casos de uso, comandos, vistas y puertos (`IGameRepository`,
+  `IRealtimePublisher`, `IAuditTrail`). No depende de Spring ni de infraestructura.
+- `persistence`: `InMemoryGameRepository` (por defecto) y `persistence.mongo` (perfil `mongo`).
 - `presentation`: controladores REST, DTOs y manejo de errores.
-- `realtime`: WebSocket de notificación (`/ws/games`), registro de sesiones y
-  publicación de proyecciones por jugador.
-- `config`: composition root de Spring; única capa que conoce las implementaciones.
+- `realtime`: WebSocket de notificación por jugador.
+- `audit`: adaptador JSON Lines del puerto de auditoría.
+- `config`: composition root; única capa que conoce las implementaciones.
 - `bootstrap`: registro de variantes por `ServiceLoader`.
 
-Las restricciones se verifican con ArchUnit en
-`tests/architecture/ArchitectureFitnessTest.java`: pureza del dominio,
-aislamiento de variantes, presentación sin saltarse `application`, ausencia de
-ciclos y orquestador sin estrategias concretas. No se deben debilitar estas
-pruebas para permitir una dependencia indebida.
+Una nueva variante implementa `IReglaJuego` (los métodos `terminaPartidaAlCerrar`
+y `descripcionCierre` tienen implementación por defecto) y se declara en
+`META-INF/services/com.apuntado.domain.rules.api.IReglaJuego` dentro de su JAR.
+No requiere cambios en `TurnOrchestratorComponent`.
 
-## Pruebas
+## Pruebas y fitness functions
 
-`./mvnw clean verify` ejecuta 67 pruebas (dominio, aplicación, persistencia,
-controladores, mapeo BSON, WebSocket, arquitectura y métricas) y Checkstyle con
-complejidad ciclomática máxima de 10. ArchUnit también valida que `application`
-no dependa de Spring ni de la infraestructura y que `realtime` solo use vistas de
-aplicación. JaCoCo exige al menos 80 % de cobertura de líneas y 60 % de ramas.
-Las pruebas `MongoGameRepositoryIT` quedan deshabilitadas salvo que se solicite
-la integración real.
+`./mvnw clean verify` ejecuta **118 pruebas** y falla si se rompe cualquiera de estas reglas:
 
-`ArchitectureMetricsTest` calcula acoplamiento aferente/efrente (Ca/Ce),
-inestabilidad (I), abstracción (A) y distancia a la secuencia principal (D) por
-módulo y por paquete, y escribe `target/architecture-metrics.md`. El test falla
-si el dominio deja de ser independiente, si presentación pasa a ser dependida o
-si el contrato de variantes se aleja de la secuencia principal.
+- **ArchUnit (16 reglas):** aislamiento entre variantes, UI aislada del
+  almacenamiento, ausencia de ciclos, dominio puro, orquestador sin estrategias
+  concretas, aplicación sin frameworks ni adaptadores, presentación que solo habla
+  con la fachada de aplicación (Ley de Deméter entre capas), entre otras.
+- **Checkstyle:** complejidad ciclomática máxima de 10 por método.
+- **JaCoCo:** al menos 80 % de líneas y 60 % de ramas.
+- **Métricas:** `ArchitectureMetricsTest` escribe Ca, Ce, I, A y D por módulo y
+  paquete en `target/architecture-metrics.md`.
+- **Benchmark (R8):** `EvaluatorBenchmarkTest` mide p50/p95/p99 del evaluador en
+  `target/evaluator-benchmark.md`.
+- **Casos borde:** sobrante de exactamente 5, ternas incompletas, escaleras con
+  As bajo, detección de 100 frente a 101 exactos, partidas completas,
+  rebarajado del pozo, reintentos, cierres concurrentes y fallo antes del commit.
 
-## CI/CD y métricas
-
-GitHub Actions (`.github/workflows/architecture.yml`) se ejecuta en cada `push` y
-`pull_request`:
-
-1. `verify`: compila, ejecuta las 67 pruebas, las Fitness Functions de ArchUnit,
-   Checkstyle y JaCoCo; publica `quality-reports` y escribe el reporte de
-   acoplamiento en el resumen del job.
-2. `integration`: levanta `mongo:7` como service container y ejecuta
-   `MongoGameRepositoryIT` con `APUNTADO_MONGO_IT=true`.
-
-Artefactos generados:
-
-- `target/surefire-reports/`: resultados JUnit.
-- `target/checkstyle-result.xml`: complejidad ciclomática y estilo.
-- `target/site/jacoco/`: cobertura HTML y XML.
-- `target/architecture-metrics.md`: Ca/Ce, I, A y D por módulo y paquete.
-
-Para reproducir la verificación local sin red:
+Pruebas de integración con MongoDB real (6 pruebas `*IT`: cierres simultáneos
+desde dos instancias, reintentos, recuperación tras reinicio y partida hasta 101):
 
 ```bash
-JAVA_HOME="$PWD/.tooling/jdk-17.0.21.1+2" \
-./mvnw --offline --batch-mode -Dmaven.repo.local=.tooling/m2 clean verify
+docker compose up -d mongo
+APUNTADO_MONGO_IT=true ./mvnw --batch-mode "-Dtest=*IT" -Dsurefire.failIfNoSpecifiedTests=false test
 ```
 
-## Pendiente para completar el Entregable 3
+## CI/CD
 
-- Ejecutar el workflow en GitHub y capturar la evidencia del pipeline.
-- Habilitar Docker en WSL para la integración local (el CI ya la ejecuta).
-- Diagramas UML de despliegue, secuencia y clases del código final.
-- Validación con 3 a 5 usuarios externos, checklists y retrospectiva de trade-offs.
+El workflow está en la raíz del repositorio:
+[`.github/workflows/quality.yml`](../.github/workflows/quality.yml) (GitHub solo
+ejecuta workflows ubicados ahí). Corre en cada `push` y `pull_request`:
 
-## Esquemas y extensibilidad
+1. `verify`: build, 118 pruebas, ArchUnit, Checkstyle y JaCoCo; publica
+   `quality-reports` y escribe métricas y benchmark en el resumen del job.
+2. `integration`: `mongo:7` como service container y las pruebas `*IT`.
+3. `release`: construye la imagen con `docker compose`, levanta el stack y hace
+   un smoke test de la API.
+
+## Esquemas
 
 `schemas/` usa JSON Schema 2020-12 para validación de aplicación; no copiarlo
 directamente al validador `$jsonSchema` de MongoDB.
-
-Una nueva variante implementa `IReglaJuego`, declara un identificador estable y
-su clase en
-`src/main/resources/META-INF/services/com.apuntado.domain.rules.api.IReglaJuego`
-dentro de su JAR. No requiere cambios en `TurnOrchestratorComponent` y debe
-conservar el aislamiento entre variantes.

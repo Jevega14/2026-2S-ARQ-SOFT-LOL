@@ -54,4 +54,25 @@ class ArchitectureFitnessTest {
  @Test void compositionRootDoesNotCreateCycles() {
   slices().matching("com.apuntado.(**)").should().beFreeOfCycles().check(code);
  }
+ /** Entregable 3, prueba 2: la UI (presentación y tiempo real) no conoce el almacenamiento de partidas. */
+ @Test void userInterfaceIsIsolatedFromGameStorage() {
+  noClasses().that().resideInAnyPackage("..presentation..","..realtime..")
+   .should().dependOnClassesThat().resideInAnyPackage("..persistence..","com.mongodb..","org.bson..",
+    "org.springframework.data..").check(code);
+ }
+ /** Ley de Deméter entre capas: el adaptador HTTP solo habla con su amigo inmediato (la fachada de aplicación). */
+ @Test void presentationOnlyTalksToTheApplicationFacade() {
+  classes().that().resideInAPackage("..presentation..")
+   .should().onlyDependOnClassesThat().resideInAnyPackage("..presentation..","..application","..application.command..",
+    "..application.view..","java..","jakarta..","org.springframework..").check(code);
+ }
+ @Test void auditAdapterOnlyKnowsTheAuditPort() {
+  noClasses().that().resideInAPackage("..audit..")
+   .should().dependOnClassesThat().resideInAnyPackage("..domain..","..persistence..","..presentation..","..realtime..")
+   .check(code);
+ }
+ @Test void applicationDoesNotDependOnAdapters() {
+  noClasses().that().resideInAPackage("..application..")
+   .should().dependOnClassesThat().resideInAnyPackage("..audit..","..realtime..","org.slf4j..").check(code);
+ }
 }

@@ -20,6 +20,8 @@ public record GameView(
  int deckCount,
  int discardCount,
  CardView discardTop,
- List<RoundResultView> lastRoundResults
+ List<RoundResultView> lastRoundResults,
+ String lastClosedBy,
+ String closeRequirement
 ) {
 }

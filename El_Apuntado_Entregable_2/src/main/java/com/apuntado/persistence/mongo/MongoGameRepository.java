@@ -3,6 +3,7 @@ package com.apuntado.persistence.mongo;
 import com.apuntado.application.DuplicateGameException;
 import com.apuntado.application.GameNotFoundException;
 import com.apuntado.application.OptimisticLockException;
+import com.apuntado.application.port.CommandReceipt;
 import com.apuntado.application.port.IGameRepository;
 import com.apuntado.domain.model.GameSession;
 import java.nio.charset.StandardCharsets;
@@ -50,27 +51,31 @@ public final class MongoGameRepository implements IGameRepository {
  }
 
  @Override
- public void save(GameSession previous, GameSession updated, String commandId) {
+ public void save(GameSession previous, GameSession updated, CommandReceipt receipt) {
   Objects.requireNonNull(previous, "previous");
   Objects.requireNonNull(updated, "updated");
-  String receipt = Objects.requireNonNull(commandId, "commandId");
+  Objects.requireNonNull(receipt, "receipt");
   if (updated.version() != previous.version() + 1) {
    throw new IllegalArgumentException("La actualización debe incrementar la versión en uno");
   }
   Query query = Query.query(Criteria.where(GameSessionMapper.ID).is(previous.id())
    .and("version").is(previous.version()));
-  Update update = new Update().push(GameSessionMapper.RECEIPTS, receipt);
+  Update update = new Update().push(GameSessionMapper.RECEIPTS, GameSessionMapper.receiptToDocument(receipt));
   applyState(update, updated);
   if (template.updateFirst(query, update, COLLECTION).getMatchedCount() == 0) resolveFailure(previous.id());
  }
 
  @Override
- public Optional<GameSession> receipt(String gameId, String commandId) {
+ public Optional<CommandReceipt> receipt(String gameId, String commandId) {
   if (gameId == null || commandId == null) return Optional.empty();
   Query query = Query.query(Criteria.where(GameSessionMapper.ID).is(gameId)
-   .and(GameSessionMapper.RECEIPTS).is(commandId));
+   .and(GameSessionMapper.RECEIPTS + ".commandId").is(commandId));
+  query.fields().include(GameSessionMapper.RECEIPTS);
   Document document = template.findOne(query, Document.class, COLLECTION);
-  return Optional.ofNullable(document).map(GameSessionMapper::toDomain);
+  if (document == null) return Optional.empty();
+  return document.getList(GameSessionMapper.RECEIPTS, Document.class).stream()
+   .filter(receipt -> commandId.equals(receipt.getString("commandId")))
+   .findFirst().map(GameSessionMapper::receiptFromDocument);
  }
 
  private void applyState(Update update, GameSession session) {

@@ -37,7 +37,7 @@ public record GameSession(
    throw new IllegalArgumentException("El turno debe pertenecer a un jugador");
   }
   if (status == GameStatus.ACTIVE) validateActiveState(round, turn, winnerId, totals, players);
-  if (status == GameStatus.FINISHED) validateFinishedState(round, turn, winnerId, totals, players);
+  if (status == GameStatus.FINISHED) validateFinishedState(round, turn, winnerId, totals);
   if (status == GameStatus.WAITING) throw new IllegalArgumentException("La sesión debe iniciar activa");
  }
 
@@ -81,7 +81,13 @@ public record GameSession(
    totals, completedRounds, winnerId);
  }
 
- public GameSession closeRound(String playerId, List<PlayerScore> updatedTotals, List<RoundScore> results) {
+ /**
+  * Cierra la ronda del jugador en turno con los puntajes ya liquidados.
+  * Termina la partida si la modalidad lo indica ({@code endsGame}) o si solo queda un jugador activo;
+  * en otro caso abre la siguiente ronda con {@code nextDeck}.
+  */
+ public GameSession closeRound(String playerId, List<PlayerScore> updatedTotals, List<RoundScore> results,
+  boolean endsGame, List<Card> nextDeck) {
   requireTurn(playerId, TurnPhase.DISCARD);
   PlayerHandState closerHand = round.handOf(playerId);
   if (closerHand.cards().size() != 10) throw new IllegalArgumentException("La mano debe tener diez cartas");
@@ -90,13 +96,13 @@ public record GameSession(
   List<RoundState> history = new java.util.ArrayList<>(completedRounds);
   history.add(closedRound);
   List<PlayerSeat> activePlayers = activePlayers(players, updatedTotals);
-  if (activePlayers.size() == 1) {
+  if (endsGame || activePlayers.size() == 1) {
    return new GameSession(id, variantId, players, currentRound, closedRound,
     new TurnState(playerId, turn.number(), TurnPhase.CLOSED), GameStatus.FINISHED, version + 1,
-    updatedTotals, history, activePlayers.get(0).playerId());
+    updatedTotals, history, playerId);
   }
   PlayerSeat nextStarter = nextActiveAfter(playerId, updatedTotals);
-  RoundState nextRound = RoundState.open(currentRound + 1, activePlayers, StandardDeck.shuffled());
+  RoundState nextRound = RoundState.open(currentRound + 1, activePlayers, nextDeck);
   return new GameSession(id, variantId, players, currentRound + 1, nextRound,
    new TurnState(nextStarter.playerId(), 1, TurnPhase.DRAW), GameStatus.ACTIVE, version + 1,
    updatedTotals, history, null);
@@ -132,10 +138,11 @@ public record GameSession(
   if (scoreFor(totals, turn.playerId()).eliminated()) throw new IllegalArgumentException("Turno de jugador eliminado");
  }
 
- private static void validateFinishedState(RoundState round, TurnState turn, String winnerId, List<PlayerScore> totals,
-  List<PlayerSeat> players) {
+ /** Quien cierra suma 0, así que nunca queda eliminado: el ganador siempre es quien cerró la última ronda. */
+ private static void validateFinishedState(RoundState round, TurnState turn, String winnerId,
+  List<PlayerScore> totals) {
   if (round.status() != RoundStatus.CLOSED || turn.phase() != TurnPhase.CLOSED || winnerId == null
-   || activePlayers(players, totals).size() != 1 || !winnerId.equals(activePlayers(players, totals).get(0).playerId())) {
+   || !winnerId.equals(round.closedBy()) || scoreFor(totals, winnerId).eliminated()) {
    throw new IllegalArgumentException("Estado final inválido");
   }
  }

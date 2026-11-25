@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.apuntado.application.OptimisticLockException;
+import com.apuntado.application.port.CommandReceipt;
 import com.apuntado.domain.model.GameSession;
 import com.apuntado.domain.model.PlayerSeat;
 import com.apuntado.persistence.mongo.MongoGameRepository;
@@ -46,6 +47,10 @@ class MongoGameRepositoryIT {
   client.close();
  }
 
+ private static CommandReceipt receipt(String commandId, GameSession updated) {
+  return new CommandReceipt(commandId, "p1", "hash-" + commandId, updated.version());
+ }
+
  private List<PlayerSeat> players() {
   return List.of(new PlayerSeat("p1", 0, "Ana"), new PlayerSeat("p2", 1, "Luis"));
  }
@@ -63,9 +68,11 @@ class MongoGameRepositoryIT {
   GameSession previous = GameSession.start("g", "CLASICA", players());
   repository.create(previous);
   GameSession updated = previous.drawFromDeck("p1");
-  repository.save(previous, updated, "cmd-1");
-  assertTrue(repository.receipt("g", "cmd-1").isPresent());
-  assertThrows(OptimisticLockException.class, () -> repository.save(previous, updated, "cmd-2"));
+  repository.save(previous, updated, receipt("cmd-1", updated));
+  CommandReceipt stored = repository.receipt("g", "cmd-1").orElseThrow();
+  assertEquals(receipt("cmd-1", updated), stored);
+  assertTrue(repository.receipt("g", "cmd-2").isEmpty());
+  assertThrows(OptimisticLockException.class, () -> repository.save(previous, updated, receipt("cmd-2", updated)));
  }
 
  @Test
@@ -79,7 +86,7 @@ class MongoGameRepositoryIT {
   Runnable attempt = () -> {
    try {
     start.await();
-    repository.save(previous, updated, "cmd-" + Thread.currentThread().getId());
+    repository.save(previous, updated, receipt("cmd-" + Thread.currentThread().getId(), updated));
     accepted.incrementAndGet();
    } catch (OptimisticLockException exception) {
     conflicts.incrementAndGet();

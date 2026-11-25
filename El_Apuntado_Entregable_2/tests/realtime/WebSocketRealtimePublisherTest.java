@@ -38,6 +38,7 @@ class WebSocketRealtimePublisherTest {
   List<CardView> hand = IntStream.range(0, handSize)
    .mapToObj(index -> new CardView(viewerId + "-" + index, 1, "H", 1)).toList();
   return new GameView("game-1", "CLASICA", "ACTIVE", 1, 1, viewerId,
-   new TurnView(viewerId, 1, "DRAW"), null, List.of(), hand, 31, 1, null, List.of());
+   new TurnView(viewerId, 1, "DRAW"), null, List.of(), hand, 31, 1, null, List.of(), null,
+   "una cuarta y dos ternas (4-3-3) sin cartas sobrantes");
  }
 }

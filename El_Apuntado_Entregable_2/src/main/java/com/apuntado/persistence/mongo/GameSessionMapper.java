@@ -1,5 +1,6 @@
 package com.apuntado.persistence.mongo;
 
+import com.apuntado.application.port.CommandReceipt;
 import com.apuntado.domain.model.Card;
 import com.apuntado.domain.model.GameSession;
 import com.apuntado.domain.model.GameStatus;
@@ -50,6 +51,20 @@ public final class GameSessionMapper {
    documents(document, "totals").stream().map(GameSessionMapper::scoreFromDocument).toList(),
    documents(document, "completedRounds").stream().map(GameSessionMapper::roundFromDocument).toList(),
    document.getString("winnerId"));
+ }
+
+ /** Recibo embebido en {@code receipts} según {@code CommandReceipt} del esquema v1; solo se guardan comandos aceptados. */
+ public static Document receiptToDocument(CommandReceipt receipt) {
+  return new Document("commandId", receipt.commandId())
+   .append("actorId", receipt.actorId())
+   .append("payloadHash", receipt.payloadHash())
+   .append("resultVersion", receipt.resultVersion())
+   .append("resultCode", "ACCEPTED");
+ }
+
+ public static CommandReceipt receiptFromDocument(Document document) {
+  return new CommandReceipt(document.getString("commandId"), document.getString("actorId"),
+   document.getString("payloadHash"), integer(document, "resultVersion"));
  }
 
  private static Document playerToDocument(PlayerSeat player) {

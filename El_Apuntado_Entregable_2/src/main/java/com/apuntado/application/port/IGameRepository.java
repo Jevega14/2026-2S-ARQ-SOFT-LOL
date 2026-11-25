@@ -12,9 +12,9 @@ public interface IGameRepository {
 
  /**
   * Persiste una actualización solo si la versión almacenada coincide con {@code previous.version()}.
-  * Registra el recibo de {@code commandId} para que el comando sea idempotente.
+  * El recibo se guarda en la misma escritura para que el comando sea idempotente.
   */
- void save(GameSession previous, GameSession updated, String commandId);
+ void save(GameSession previous, GameSession updated, CommandReceipt receipt);
 
- Optional<GameSession> receipt(String gameId, String commandId);
+ Optional<CommandReceipt> receipt(String gameId, String commandId);
 }

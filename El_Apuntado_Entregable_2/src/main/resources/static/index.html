@@ -19,13 +19,14 @@
         <label for="variant">Modalidad</label>
         <select id="variant"></select>
       </div>
+      <p id="variant-rule" class="hint"></p>
       <div id="players"></div>
       <div class="row">
         <button id="add-player" class="secondary" type="button">Añadir jugador</button>
         <button id="remove-player" class="secondary" type="button">Quitar jugador</button>
         <button id="create-game" type="button">Iniciar partida</button>
       </div>
-      <p class="hint">De 2 a 4 jugadores. El juego funciona en modo "hot-seat": en cada turno se muestra la mano del jugador activo.</p>
+      <p class="hint">De 2 a 4 jugadores. Se puede jugar en un solo dispositivo (modo relevo: cada jugador ve su mano solo en su turno) o cada jugador en su propio dispositivo con el enlace que aparece al iniciar.</p>
       <p id="setup-error" class="error"></p>
     </section>
 
@@ -42,6 +43,12 @@
       </div>
 
       <p id="turn-info" class="turn-info"></p>
+      <p id="close-rule" class="rule-banner"></p>
+      <details id="invite" class="invite hidden">
+        <summary>Jugar desde varios dispositivos (enlaces por jugador)</summary>
+        <p class="hint">Abre cada enlace en el dispositivo del jugador. En red local reemplaza <code>localhost</code> por la IP de este equipo.</p>
+        <ul id="invite-links"></ul>
+      </details>
       <p id="message" class="message"></p>
       <p id="error" class="error"></p>
 
@@ -63,8 +70,18 @@
         </div>
       </div>
 
-      <h3>Tu mano</h3>
+      <div class="hand-header">
+        <h3 id="hand-title">Tu mano</h3>
+        <div class="actions">
+          <button id="sort-suit" class="secondary small" type="button">Ordenar por palo</button>
+          <button id="sort-rank" class="secondary small" type="button">Ordenar por número</button>
+        </div>
+      </div>
       <p id="hand-hint" class="hint"></p>
+      <div id="handoff" class="handoff hidden">
+        <p id="handoff-text"></p>
+        <button id="reveal-hand" type="button">Ver mi mano</button>
+      </div>
       <div id="hand" class="hand"></div>
 
       <div id="actions" class="actions"></div>

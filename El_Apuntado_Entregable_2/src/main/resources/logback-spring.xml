@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Log técnico en consola y log de auditoría (una línea JSON por comando) en logs/audit.jsonl. -->
+<configuration>
+  <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+  <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+  <property name="AUDIT_DIR" value="${APUNTADO_AUDIT_DIR:-logs}"/>
+
+  <appender name="AUDIT_FILE" class="ch.qos.logback.core.FileAppender">
+    <file>${AUDIT_DIR}/audit.jsonl</file>
+    <append>true</append>
+    <encoder>
+      <pattern>%msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <logger name="AUDIT" level="INFO" additivity="false">
+    <appender-ref ref="AUDIT_FILE"/>
+  </logger>
+
+  <root level="INFO">
+    <appender-ref ref="CONSOLE"/>
+  </root>
+</configuration>

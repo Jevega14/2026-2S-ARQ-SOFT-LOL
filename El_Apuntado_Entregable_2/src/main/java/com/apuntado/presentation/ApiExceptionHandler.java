@@ -1,5 +1,6 @@
 package com.apuntado.presentation;
 
+import com.apuntado.application.CommandConflictException;
 import com.apuntado.application.DuplicateGameException;
 import com.apuntado.application.GameNotFoundException;
 import com.apuntado.application.OptimisticLockException;
@@ -20,7 +21,8 @@ public class ApiExceptionHandler {
   return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiError(exception.getMessage()));
  }
 
- @ExceptionHandler({OptimisticLockException.class, DuplicateGameException.class, IllegalStateException.class})
+ @ExceptionHandler({OptimisticLockException.class, DuplicateGameException.class, CommandConflictException.class,
+  IllegalStateException.class})
  public ResponseEntity<ApiError> conflict(RuntimeException exception) {
   return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiError(exception.getMessage()));
  }

@@ -1,3 +1,6 @@
+# Un solo comando levanta el MVP completo:  docker compose up --build
+# App en http://localhost:8080 (perfil mongo) y MongoDB 7 con volumen persistente.
+# Para la sustentación con mano guionada:   APUNTADO_DECK=demo docker compose up --build
 services:
   mongo:
     image: mongo:7
@@ -12,6 +15,24 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  app:
+    build: .
+    image: el-apuntado:latest
+    container_name: apuntado-app
+    restart: unless-stopped
+    depends_on:
+      mongo:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: mongo
+      SPRING_DATA_MONGODB_URI: mongodb://mongo:27017
+      SPRING_DATA_MONGODB_DATABASE: apuntado
+      APUNTADO_DECK: ${APUNTADO_DECK:-random}
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./logs:/app/logs
 
 volumes:
   mongo-data:

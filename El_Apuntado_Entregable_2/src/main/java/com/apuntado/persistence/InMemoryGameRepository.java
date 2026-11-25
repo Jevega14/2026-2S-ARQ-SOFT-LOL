@@ -3,6 +3,7 @@ package com.apuntado.persistence;
 import com.apuntado.application.DuplicateGameException;
 import com.apuntado.application.GameNotFoundException;
 import com.apuntado.application.OptimisticLockException;
+import com.apuntado.application.port.CommandReceipt;
 import com.apuntado.application.port.IGameRepository;
 import com.apuntado.domain.model.GameSession;
 import java.util.Map;
@@ -11,13 +12,13 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Implementación en memoria del agregado partida.
+ * Implementación en memoria del agregado partida (perfil por defecto).
  * Aplica control de concurrencia optimista por versión e idempotencia por {@code commandId}.
- * Es una copia de trabajo: en producción MongoDB será la fuente de verdad (ADR-04).
+ * No sobrevive a un reinicio: con el perfil {@code mongo}, MongoDB es la fuente de verdad (ADR-04).
  */
 public final class InMemoryGameRepository implements IGameRepository {
  private final Map<String, GameSession> games = new ConcurrentHashMap<>();
- private final Map<String, GameSession> receipts = new ConcurrentHashMap<>();
+ private final Map<String, CommandReceipt> receipts = new ConcurrentHashMap<>();
 
  @Override
  public Optional<GameSession> findById(String gameId) {
@@ -32,10 +33,10 @@ public final class InMemoryGameRepository implements IGameRepository {
  }
 
  @Override
- public synchronized void save(GameSession previous, GameSession updated, String commandId) {
+ public synchronized void save(GameSession previous, GameSession updated, CommandReceipt receipt) {
   Objects.requireNonNull(previous, "previous");
   Objects.requireNonNull(updated, "updated");
-  String receiptId = Objects.requireNonNull(commandId, "commandId");
+  Objects.requireNonNull(receipt, "receipt");
   GameSession current = games.get(previous.id());
   if (current == null) throw new GameNotFoundException(previous.id());
   if (current.version() != previous.version()) throw new OptimisticLockException(previous.id());
@@ -43,11 +44,11 @@ public final class InMemoryGameRepository implements IGameRepository {
    throw new IllegalArgumentException("La actualización debe incrementar la versión en uno");
   }
   games.put(updated.id(), updated);
-  receipts.put(receiptKey(updated.id(), receiptId), updated);
+  receipts.put(receiptKey(updated.id(), receipt.commandId()), receipt);
  }
 
  @Override
- public Optional<GameSession> receipt(String gameId, String commandId) {
+ public Optional<CommandReceipt> receipt(String gameId, String commandId) {
   if (gameId == null || commandId == null) return Optional.empty();
   return Optional.ofNullable(receipts.get(receiptKey(gameId, commandId)));
  }

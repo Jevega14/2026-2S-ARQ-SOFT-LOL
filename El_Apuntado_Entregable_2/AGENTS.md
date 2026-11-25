@@ -44,7 +44,7 @@ estas pruebas para permitir una dependencia indebida.
 
 - Baraja de 52 cartas, sin comodines; as vale 1, figuras valen 10.
 - Participan de 2 a 4 jugadores.
-- Clásica cierra con grupos 4-3-3.
+- Clásica cierra con grupos 4-3-3 y el primer cierre válido termina la partida (una sola ronda).
 - Apuntado cierra con grupos 3-3-3 y sobrante menor que 5.
 - El cierre otorga 0 puntos a quien cierra; los demás suman todas sus cartas.
 - Hay eliminación desde 101 puntos; gana el último jugador no eliminado.
@@ -69,7 +69,8 @@ confiables.
 
 ## Calidad y pruebas
 
-- Ejecutar `mvn clean verify` tras cambios de código o configuración.
+- Ejecutar `./mvnw clean verify` tras cambios de código o configuración, y las
+  pruebas `*IT` con `APUNTADO_MONGO_IT=true` si se toca persistencia.
 - Mantener la complejidad ciclomática en un máximo de 10, según Checkstyle.
 - Añadir o actualizar pruebas de dominio al cambiar una regla.
 - No modificar evidencia histórica en `docs/evidence/` salvo que se solicite
@@ -88,8 +89,8 @@ confiables.
 
 ## Límites de modificación
 
-- No implementar MongoDB, red, endpoints o mecanismos transaccionales sin
-  autorización explícita.
+- MongoDB, REST, WebSocket, recibos de comando y auditoría ya están implementados
+  (Entregable 3); cambios en sus contratos requieren revisar ADR-04 y ADR-05.
 - No sobrescribir ADR-01 ni ADR-02: deben conservar o recuperar el contenido
   auténtico del Entregable 1.
 - Evitar cambios incompatibles en `IReglaJuego`, los identificadores de

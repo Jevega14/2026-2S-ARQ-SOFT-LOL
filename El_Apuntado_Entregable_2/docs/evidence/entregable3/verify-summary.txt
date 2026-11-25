@@ -1,0 +1,20 @@
+[INFO] Tests run: 27, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.123 s -- in com.apuntado.tests.CombinationEdgeCasesTest
+[INFO] Tests run: 16, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.188 s -- in com.apuntado.tests.ArchitectureFitnessTest
+[INFO] Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.034 s -- in com.apuntado.tests.application.GameApplicationServiceTest
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.019 s -- in com.apuntado.tests.application.CommandIdempotencyTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.134 s -- in com.apuntado.tests.ArchitectureMetricsTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.791 s -- in com.apuntado.tests.presentation.GameControllerTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.295 s -- in com.apuntado.tests.config.ApplicationConfigTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.161 s -- in com.apuntado.tests.realtime.GameWebSocketHandlerTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.063 s -- in com.apuntado.tests.realtime.WebSocketRealtimePublisherTest
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.029 s -- in com.apuntado.tests.FullGameTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.975 s -- in com.apuntado.tests.EvaluatorBenchmarkTest
+[INFO] Tests run: 16, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.008 s -- in com.apuntado.tests.RuleVariantsTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.032 s -- in com.apuntado.tests.persistence.GameSessionMapperTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.002 s -- in com.apuntado.tests.persistence.InMemoryGameRepositoryTest
+[INFO] Tests run: 13, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.012 s -- in com.apuntado.tests.GameSessionTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.002 s -- in com.apuntado.audit.JsonLinesAuditTrailTest
+[INFO] Tests run: 118, Failures: 0, Errors: 0, Skipped: 0
+[INFO] You have 0 Checkstyle violations.
+[INFO] BUILD SUCCESS
+Cobertura JaCoCo: lineas 87.4% (675/772), ramas 69.9% (239/342)

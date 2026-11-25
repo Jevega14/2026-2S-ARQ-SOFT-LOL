@@ -20,7 +20,7 @@ class GameSessionTest {
   return List.of(new PlayerSeat("p1", 0, "Ana"), new PlayerSeat("p2", 1, "Luis"));
  }
  private GameSession readyForClassicClose() {
-  List<String> groupIds = List.of("7H", "7D", "7S", "7C", "9H", "9D", "9S", "11H", "11D", "11S");
+  List<String> groupIds = com.apuntado.tests.support.Decks.CLOSING_HAND;
   List<com.apuntado.domain.model.Card> deck = new ArrayList<>(StandardDeck.shuffled());
   List<com.apuntado.domain.model.Card> winningHand = deck.stream().filter(card -> groupIds.contains(card.id())).toList();
   deck.removeAll(winningHand);
@@ -71,13 +71,32 @@ class GameSessionTest {
   assertEquals(11, afterDraw.round().handOf("p1").cards().size());
   assertTrue(afterDraw.round().discard().isEmpty());
  }
- @Test void closesAValidClassicRoundAndStartsTheNextOne() {
+ @Test void drawingFromAnEmptyDiscardPileIsAConflictNotACrash() {
+  com.apuntado.domain.model.RoundState empty = GameSession.start("game-1", "CLASICA", players())
+   .drawFromDiscard("p1").round();
+  assertThrows(IllegalStateException.class, () -> empty.drawFromDiscard("p1"));
+ }
+ @Test void aValidClassicCloseWinsTheGameInASingleRound() {
   GameSession closed = closing.attemptClose(readyForClassicClose(), "p1", new ReglaClasica());
+  assertEquals(GameStatus.FINISHED, closed.status());
+  assertEquals("p1", closed.winnerId());
+  assertEquals(1, closed.currentRound());
+  assertEquals(1, closed.completedRounds().size());
+  assertEquals(0, closed.scoreOf("p1").total());
+  assertFalse(closed.scoreOf("p2").eliminated());
+  assertEquals(TurnPhase.CLOSED, closed.turn().phase());
+ }
+ @Test void aValidApuntadoCloseStartsTheNextRoundWithTheNextPlayer() {
+  GameSession closed = closing.attemptClose(asVariant(readyForClassicClose(), "APUNTADO101"), "p1", new ReglaApuntado());
   assertEquals(GameStatus.ACTIVE, closed.status());
   assertEquals(2, closed.currentRound());
   assertEquals(1, closed.completedRounds().size());
   assertEquals(0, closed.scoreOf("p1").total());
   assertEquals("p2", closed.turn().playerId());
+ }
+ private static GameSession asVariant(GameSession session, String variantId) {
+  return new GameSession(session.id(), variantId, session.players(), session.currentRound(), session.round(),
+   session.turn(), session.status(), session.version(), session.totals(), session.completedRounds(), null);
  }
  @Test void rejectsAnInvalidCloseOrARuleForAnotherVariant() {
   GameSession invalid = GameSession.start("game-1", "CLASICA", players()).drawFromDeck("p1");
@@ -90,17 +109,17 @@ class GameSessionTest {
  }
  @Test void finishesWhenTheOnlyRivalReachesTheLimit() {
   GameSession ready = readyForClassicClose();
-  GameSession withRivalAtOneHundred = new GameSession(ready.id(), ready.variantId(), ready.players(),
+  GameSession withRivalAtOneHundred = new GameSession(ready.id(), "APUNTADO101", ready.players(),
    ready.currentRound(), ready.round(), ready.turn(), ready.status(), ready.version(),
    List.of(new PlayerScore("p1", 0), new PlayerScore("p2", 100)), ready.completedRounds(), null);
-  GameSession finished = closing.attemptClose(withRivalAtOneHundred, "p1", new ReglaClasica());
+  GameSession finished = closing.attemptClose(withRivalAtOneHundred, "p1", new ReglaApuntado());
   assertEquals(GameStatus.FINISHED, finished.status());
   assertEquals("p1", finished.winnerId());
   assertTrue(finished.scoreOf("p2").eliminated());
   assertEquals(TurnPhase.CLOSED, finished.turn().phase());
  }
  @Test void keepsPlayingAfterEliminatingAPlayerAndCanCloseTheNextRound() {
-  GameSession closed = closing.attemptClose(readyForClassicCloseWithThreePlayers(), "p1", new ReglaClasica());
+  GameSession closed = closing.attemptClose(readyForClassicCloseWithThreePlayers(), "p1", new ReglaApuntado());
   assertTrue(closed.scoreOf("p3").eliminated());
   assertEquals(GameStatus.ACTIVE, closed.status());
   assertEquals(2, closed.currentRound());
@@ -109,14 +128,14 @@ class GameSessionTest {
  }
 
  private GameSession readyForClassicCloseWithThreePlayers() {
-  List<String> groupIds = List.of("7H", "7D", "7S", "7C", "9H", "9D", "9S", "11H", "11D", "11S");
+  List<String> groupIds = com.apuntado.tests.support.Decks.CLOSING_HAND;
   List<com.apuntado.domain.model.Card> deck = new ArrayList<>(StandardDeck.shuffled());
   List<com.apuntado.domain.model.Card> winningHand = deck.stream().filter(card -> groupIds.contains(card.id())).toList();
   deck.removeAll(winningHand);
   deck.addAll(0, winningHand);
   List<PlayerSeat> players = List.of(new PlayerSeat("p1", 0, "Ana"), new PlayerSeat("p2", 1, "Luis"),
    new PlayerSeat("p3", 2, "Eva"));
-  GameSession session = GameSession.start("game-3", "CLASICA", players, deck);
+  GameSession session = GameSession.start("game-3", "APUNTADO101", players, deck);
   GameSession withScores = new GameSession(session.id(), session.variantId(), session.players(), session.currentRound(),
    session.round(), session.turn(), session.status(), session.version(),
    List.of(new PlayerScore("p1", 0), new PlayerScore("p2", 0), new PlayerScore("p3", 95)),

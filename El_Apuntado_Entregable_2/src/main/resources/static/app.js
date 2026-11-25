@@ -1,10 +1,22 @@
-const state = { game: null, socket: null, socketViewer: null };
+const state = {
+  game: null,
+  socket: null,
+  socketViewer: null,
+  variants: [],
+  sortMode: "none",
+  // Modo dispositivo: el enlace ?game=...&player=... fija al jugador que usa este navegador.
+  deviceViewer: null,
+  // Modo relevo (un solo dispositivo): jugador que ya confirmó que tiene el dispositivo.
+  revealedFor: null,
+};
 
 const SUIT_SYMBOL = { H: "♥", D: "♦", S: "♠", C: "♣" };
 const RANK_LABEL = { 1: "A", 11: "J", 12: "Q", 13: "K" };
 const PHASE_LABEL = { DRAW: "robar", DISCARD: "descartar", CLOSED: "cerrada" };
 const STATUS_LABEL = { ACTIVE: "en curso", FINISHED: "finalizada", WAITING: "en espera" };
 const VARIANT_LABEL = { CLASICA: "Clásica 4-3-3", APUNTADO101: "Apuntado a 101" };
+
+const SUIT_ORDER = { H: 0, D: 1, S: 2, C: 3 };
 
 const setupNames = ["Jugador 1", "Jugador 2"];
 
@@ -13,6 +25,10 @@ const $ = (id) => document.getElementById(id);
 function uuid() {
   if (window.crypto && typeof window.crypto.randomUUID === "function") return window.crypto.randomUUID();
   return "cmd-" + Date.now() + "-" + Math.random().toString(16).slice(2);
+}
+
+function pointsLabel(points) {
+  return points + (points === 1 ? " punto" : " puntos");
 }
 
 function cardLabel(card) {
@@ -67,6 +83,7 @@ function cardElement(card, options) {
   points.className = "points";
   points.textContent = card.points + " pts";
   element.append(rank, points);
+  element.setAttribute("aria-label", cardLabel(card) + " (" + pointsLabel(card.points) + ")");
   if (settings.onClick) {
     element.classList.add("selectable");
     element.tabIndex = 0;
@@ -79,13 +96,26 @@ function cardElement(card, options) {
 async function loadVariants() {
   const select = $("variant");
   select.innerHTML = "";
-  const variants = await api("/api/variants");
-  variants.forEach((variant) => {
+  state.variants = await api("/api/variants");
+  state.variants.forEach((variant) => {
     const option = document.createElement("option");
     option.value = variant.id;
     option.textContent = variantName(variant.id);
     select.appendChild(option);
   });
+  renderVariantRule();
+}
+
+function variantRuleText(variant) {
+  const ending = variant.singleRound
+    ? "Se juega una sola ronda: gana quien cierre primero."
+    : "Se juegan rondas: quien acumule 101 o más queda eliminado y gana el último en pie.";
+  return "Para cerrar: " + variant.closeRequirement + ". " + ending;
+}
+
+function renderVariantRule() {
+  const variant = state.variants.find((item) => item.id === $("variant").value);
+  $("variant-rule").textContent = variant ? variantRuleText(variant) : "";
 }
 
 function renderSetupPlayers() {
@@ -121,6 +151,9 @@ async function createGame() {
   }));
   try {
     const view = await post("/api/games", { variantId, players });
+    state.deviceViewer = null;
+    state.revealedFor = null;
+    window.history.replaceState(null, "", "/?game=" + encodeURIComponent(view.gameId));
     showGame(view);
   } catch (error) {
     $("setup-error").textContent = error.message;
@@ -128,7 +161,22 @@ async function createGame() {
 }
 
 function viewerFor(view) {
+  if (state.deviceViewer) return state.deviceViewer;
   return view.status === "ACTIVE" ? view.turn.playerId : view.viewerId;
+}
+
+function awaitingHandoff(view) {
+  return !state.deviceViewer && view.status === "ACTIVE" && state.revealedFor !== view.turn.playerId;
+}
+
+function sortedHand(cards) {
+  const hand = cards.slice();
+  if (state.sortMode === "suit") {
+    hand.sort((a, b) => SUIT_ORDER[a.suit] - SUIT_ORDER[b.suit] || a.rank - b.rank);
+  } else if (state.sortMode === "rank") {
+    hand.sort((a, b) => a.rank - b.rank || SUIT_ORDER[a.suit] - SUIT_ORDER[b.suit]);
+  }
+  return hand;
 }
 
 async function refresh() {
@@ -203,12 +251,18 @@ function render(view) {
   $("game-meta").textContent = "Ronda " + view.currentRound + " · " + STATUS_LABEL[view.status] +
     " · versión " + view.version;
 
+  const variant = state.variants.find((item) => item.id === view.variantId);
+  $("close-rule").textContent = variant ? variantRuleText(variant) : "Para cerrar: " + view.closeRequirement + ".";
   if (view.status === "FINISHED") {
-    $("turn-info").textContent = "Ganador: " + playerName(view, view.winnerId);
+    $("turn-info").textContent = "🏆 Partida terminada. Ganador: " + playerName(view, view.winnerId);
+    $("turn-info").classList.add("winner-banner");
   } else {
-    $("turn-info").textContent = "Turno de " + playerName(view, view.turn.playerId) +
+    $("turn-info").classList.remove("winner-banner");
+    const you = state.deviceViewer && state.deviceViewer === view.turn.playerId ? " (tú)" : "";
+    $("turn-info").textContent = "Turno de " + playerName(view, view.turn.playerId) + you +
       " · fase: " + (PHASE_LABEL[view.turn.phase] || view.turn.phase);
   }
+  renderInvite(view);
 
   renderPlayers(view);
   $("deck-count").textContent = view.deckCount;
@@ -256,10 +310,44 @@ function canDiscard(view) {
     view.turn.phase === "DISCARD" && view.hand.length === 11;
 }
 
+function renderInvite(view) {
+  const list = $("invite-links");
+  list.innerHTML = "";
+  view.players.forEach((player) => {
+    const item = document.createElement("li");
+    const link = document.createElement("a");
+    const url = window.location.origin + "/?game=" + encodeURIComponent(view.gameId) +
+      "&player=" + encodeURIComponent(player.playerId);
+    link.href = url;
+    link.target = "_blank";
+    link.textContent = player.displayName + ": " + url;
+    item.appendChild(link);
+    list.appendChild(item);
+  });
+  $("invite").classList.toggle("hidden", view.status !== "ACTIVE");
+}
+
+function renderHandoff(view) {
+  const pending = awaitingHandoff(view);
+  $("handoff").classList.toggle("hidden", !pending);
+  if (pending) {
+    const name = playerName(view, view.turn.playerId);
+    $("handoff-text").textContent = "Turno de " + name + ". Pasa el dispositivo a " + name +
+      " y pulsa «Ver mi mano».";
+  }
+  return pending;
+}
+
 function renderHand(view) {
   const hand = $("hand");
   hand.innerHTML = "";
+  $("hand-title").textContent = view.hand.length ? "Mano de " + playerName(view, view.viewerId) : "Tu mano";
+  if (renderHandoff(view)) {
+    $("hand-hint").textContent = "";
+    return;
+  }
   const discardable = canDiscard(view);
+  const newestId = discardable ? view.hand[view.hand.length - 1].id : null;
   if (view.status === "FINISHED") {
     $("hand-hint").textContent = "Partida finalizada.";
   } else if (view.hand.length === 0) {
@@ -271,16 +359,22 @@ function renderHand(view) {
   } else {
     $("hand-hint").textContent = "Mano de " + playerName(view, view.viewerId) + ".";
   }
-  view.hand.forEach((card) => {
+  sortedHand(view.hand).forEach((card) => {
     const onClick = discardable ? () => discardCard(card.id) : null;
-    hand.appendChild(cardElement(card, { onClick }));
+    const element = cardElement(card, { onClick });
+    if (card.id === newestId) {
+      element.classList.add("new-card");
+      element.title = "Carta recién robada";
+      element.setAttribute("aria-label", cardLabel(card) + " (" + pointsLabel(card.points) + "), recién robada");
+    }
+    hand.appendChild(element);
   });
 }
 
 function renderActions(view) {
   const actions = $("actions");
   actions.innerHTML = "";
-  if (view.status !== "ACTIVE" || view.turn.playerId !== view.viewerId) return;
+  if (view.status !== "ACTIVE" || view.turn.playerId !== view.viewerId || awaitingHandoff(view)) return;
 
   if (view.turn.phase === "DRAW") {
     actions.appendChild(actionButton("Robar del mazo", "draw-deck"));
@@ -308,7 +402,7 @@ function actionButton(label, action) {
 
 function discardCard(cardId) {
   perform("/api/games/" + state.game.gameId + "/discard", {
-    playerId: state.game.turn.playerId,
+    playerId: state.game.viewerId,
     cardId: cardId,
     commandId: uuid(),
   });
@@ -320,7 +414,8 @@ function renderResults(view) {
   container.innerHTML = "";
   if (!view.lastRoundResults || view.lastRoundResults.length === 0) return;
   const title = document.createElement("h3");
-  title.textContent = "Última ronda liquidada";
+  title.textContent = "Última ronda liquidada" +
+    (view.lastClosedBy ? " · cerró " + playerName(view, view.lastClosedBy) + " (0 puntos)" : "");
   const table = document.createElement("table");
   const head = document.createElement("tr");
   ["Jugador", "Penalización", "Total acumulado"].forEach((text) => {
@@ -345,6 +440,9 @@ function renderResults(view) {
 
 function newGame() {
   state.game = null;
+  state.deviceViewer = null;
+  state.revealedFor = null;
+  window.history.replaceState(null, "", "/");
   closeSocket();
   $("game").classList.add("hidden");
   $("setup").classList.remove("hidden");
@@ -367,6 +465,34 @@ function bindEvents() {
     refresh().catch(showError);
   });
   $("new-game").addEventListener("click", newGame);
+  $("variant").addEventListener("change", renderVariantRule);
+  $("reveal-hand").addEventListener("click", () => {
+    state.revealedFor = state.game.turn.playerId;
+    render(state.game);
+  });
+  $("sort-suit").addEventListener("click", () => {
+    state.sortMode = "suit";
+    render(state.game);
+  });
+  $("sort-rank").addEventListener("click", () => {
+    state.sortMode = "rank";
+    render(state.game);
+  });
+}
+
+/** Reanuda una partida desde la URL: recuperación tras recargar o enlace de un jugador. */
+async function resumeFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const gameId = params.get("game");
+  if (!gameId) return;
+  state.deviceViewer = params.get("player");
+  const viewer = state.deviceViewer ? "?viewerId=" + encodeURIComponent(state.deviceViewer) : "";
+  try {
+    showGame(await api("/api/games/" + encodeURIComponent(gameId) + viewer));
+  } catch (error) {
+    state.deviceViewer = null;
+    $("setup-error").textContent = "No se pudo abrir la partida: " + error.message;
+  }
 }
 
 async function init() {
@@ -377,6 +503,7 @@ async function init() {
   } catch (error) {
     $("setup-error").textContent = "No se pudieron cargar las modalidades: " + error.message;
   }
+  await resumeFromUrl();
 }
 
 document.addEventListener("DOMContentLoaded", init);

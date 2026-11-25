@@ -1,6 +1,7 @@
 package com.apuntado.domain.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -50,14 +51,23 @@ public record RoundState(
  }
 
  public RoundState drawFromDeck(String playerId) {
-  if (deck.isEmpty()) throw new IllegalStateException("No quedan cartas en el mazo");
+  if (deck.isEmpty()) return reshuffleDiscard().drawFromDeck(playerId);
   Card drawn = deck.get(0);
   List<Card> remainingDeck = new ArrayList<>(deck);
   remainingDeck.remove(0);
   return withHand(handOf(playerId).add(drawn), remainingDeck, discard);
  }
 
+ /** Perfil MVP1: al agotarse el mazo, el pozo se mezcla de nuevo conservando la última carta descartada. */
+ public RoundState reshuffleDiscard() {
+  if (discard.size() < 2) throw new IllegalStateException("No quedan cartas para robar ni para rebarajar");
+  List<Card> recycled = new ArrayList<>(discard.subList(0, discard.size() - 1));
+  Collections.shuffle(recycled);
+  return new RoundState(number, hands, recycled, List.of(discard.get(discard.size() - 1)), status, closedBy, scores);
+ }
+
  public RoundState drawFromDiscard(String playerId) {
+  if (discard.isEmpty()) throw new IllegalStateException("El pozo está vacío");
   Card drawn = discard.get(discard.size() - 1);
   List<Card> remainingDiscard = new ArrayList<>(discard);
   remainingDiscard.remove(remainingDiscard.size() - 1);
