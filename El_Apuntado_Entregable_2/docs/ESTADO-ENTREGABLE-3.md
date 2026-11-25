@@ -58,7 +58,7 @@ Pendiente: tomar captura del pipeline en verde (sección 4.1), fusionar a `main`
   (4-3-3 → gana) / Apuntado (3-3-3 + sobrante < 5 → penalizaciones → ¿≥101? → fin o nueva ronda).
 - Clases de implementación fieles al código (visibilidad, tipos, Strategy), marcando implementado vs pendiente.
 
-**Fase 3 – Validación con usuarios (Claude prepara, EQUIPO ejecuta):**
+**Fase 3 – Validación con usuarios — KIT HECHO (`docs/validacion/`, `scripts/validacion_metricas.py`); FALTA que el EQUIPO ejecute las sesiones:**
 - Claude: guion de tareas, cuestionario SUS, plantilla de tabla de métricas, script que calcula métricas desde `audit.jsonl`, carpeta `docs/validacion/`.
 - Equipo: sesiones con 3–5 personas ajenas al equipo en modo `random`; fotos/capturas/video, encuestas, guardar `logs/audit.jsonl`. **No inventar datos.**
 - Al menos 2 mejoras post-validación (implementarlas y documentarlas).

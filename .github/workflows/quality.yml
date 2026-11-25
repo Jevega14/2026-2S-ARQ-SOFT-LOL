@@ -37,6 +37,8 @@ jobs:
           cache-dependency-path: El_Apuntado_Entregable_2/pom.xml
       - name: Verificación completa (pruebas, ArchUnit, Checkstyle, JaCoCo)
         run: ./mvnw --batch-mode clean verify
+      - name: Pruebas del script de métricas de validación con usuarios
+        run: python3 -m unittest discover -s scripts -v
       - name: Resumen de métricas
         if: always()
         run: |

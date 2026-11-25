@@ -183,6 +183,12 @@ ejecuta workflows ubicados ahí). Corre en cada `push` y `pull_request`:
 3. `release`: construye la imagen con `docker compose`, levanta el stack y hace
    un smoke test de la API.
 
+## Validación con usuarios
+
+El kit está en [`docs/validacion/`](docs/validacion/README.md): protocolo, consentimiento, hoja de
+observación, encuesta SUS, plantillas CSV y carpeta de evidencias. `scripts/validacion_metricas.py`
+convierte `logs/audit.jsonl` + encuestas en la tabla consolidada de la sección 3.3.
+
 ## Esquemas
 
 `schemas/` usa JSON Schema 2020-12 para validación de aplicación; no copiarlo
