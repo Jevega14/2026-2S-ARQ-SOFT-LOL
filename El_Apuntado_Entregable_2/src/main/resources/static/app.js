@@ -8,6 +8,8 @@ const state = {
   deviceViewer: null,
   // Modo relevo (un solo dispositivo): jugador que ya confirmó que tiene el dispositivo.
   revealedFor: null,
+  // MJ1: el descarte es en dos pasos (seleccionar la carta y confirmar con «Descartar»).
+  selectedCardId: null,
 };
 
 const SUIT_SYMBOL = { H: "♥", D: "♦", S: "♠", C: "♣" };
@@ -89,6 +91,16 @@ function cardElement(card, options) {
     element.tabIndex = 0;
     element.setAttribute("role", "button");
     element.addEventListener("click", settings.onClick);
+    element.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        settings.onClick();
+      }
+    });
+  }
+  if (settings.selected) {
+    element.classList.add("selected");
+    element.setAttribute("aria-pressed", "true");
   }
   return element;
 }
@@ -347,21 +359,26 @@ function renderHand(view) {
     return;
   }
   const discardable = canDiscard(view);
+  if (!discardable || !view.hand.some((card) => card.id === state.selectedCardId)) state.selectedCardId = null;
+  const selected = view.hand.find((card) => card.id === state.selectedCardId);
   const newestId = discardable ? view.hand[view.hand.length - 1].id : null;
   if (view.status === "FINISHED") {
     $("hand-hint").textContent = "Partida finalizada.";
   } else if (view.hand.length === 0) {
     $("hand-hint").textContent = "Este jugador no tiene mano activa.";
   } else if (discardable) {
-    $("hand-hint").textContent = "Selecciona una carta para descartar (tienes 11).";
+    $("hand-hint").textContent = selected
+      ? "Vas a descartar " + cardLabel(selected) + ". Pulsa «Descartar " + cardLabel(selected) +
+        "» para confirmar o toca otra carta para cambiarla."
+      : "Tienes 11 cartas: toca la carta que quieres botar y luego pulsa «Descartar».";
   } else if (view.turn.phase === "DRAW" && view.turn.playerId === view.viewerId) {
     $("hand-hint").textContent = "Roba del mazo o del pozo para comenzar tu turno.";
   } else {
     $("hand-hint").textContent = "Mano de " + playerName(view, view.viewerId) + ".";
   }
   sortedHand(view.hand).forEach((card) => {
-    const onClick = discardable ? () => discardCard(card.id) : null;
-    const element = cardElement(card, { onClick });
+    const onClick = discardable ? () => toggleSelection(card.id) : null;
+    const element = cardElement(card, { onClick, selected: card.id === state.selectedCardId });
     if (card.id === newestId) {
       element.classList.add("new-card");
       element.title = "Carta recién robada";
@@ -376,7 +393,24 @@ function renderActions(view) {
   actions.innerHTML = "";
   if (view.status !== "ACTIVE" || view.turn.playerId !== view.viewerId || awaitingHandoff(view)) return;
 
-  if (view.turn.phase === "DRAW") {
+  if (canDiscard(view)) {
+    const selected = view.hand.find((card) => card.id === state.selectedCardId);
+    const button = document.createElement("button");
+    button.type = "button";
+    button.id = "discard-button";
+    button.textContent = selected ? "Descartar " + cardLabel(selected) : "Descartar";
+    button.disabled = !selected;
+    button.addEventListener("click", () => discardCard(state.selectedCardId));
+    actions.appendChild(button);
+    if (selected) {
+      const cancel = document.createElement("button");
+      cancel.type = "button";
+      cancel.className = "secondary";
+      cancel.textContent = "Cancelar selección";
+      cancel.addEventListener("click", () => toggleSelection(selected.id));
+      actions.appendChild(cancel);
+    }
+  } else if (view.turn.phase === "DRAW") {
     actions.appendChild(actionButton("Robar del mazo", "draw-deck"));
     const discardButton = actionButton("Robar del pozo", "draw-discard");
     discardButton.disabled = view.discardCount === 0;
@@ -400,7 +434,15 @@ function actionButton(label, action) {
   return button;
 }
 
+function toggleSelection(cardId) {
+  state.selectedCardId = state.selectedCardId === cardId ? null : cardId;
+  renderHand(state.game);
+  renderActions(state.game);
+}
+
 function discardCard(cardId) {
+  if (!cardId) return;
+  state.selectedCardId = null;
   perform("/api/games/" + state.game.gameId + "/discard", {
     playerId: state.game.viewerId,
     cardId: cardId,

@@ -139,6 +139,8 @@ tr.active-player td { background: #fdf3cf; font-weight: 700; }
 .playing-card .points { font-size: 11px; color: var(--muted); align-self: flex-end; }
 .playing-card.red { color: #b23a3a; }
 .playing-card.new-card { border: 2px solid #256b3a; box-shadow: 0 0 0 3px #b8dfc4; }
+.playing-card.selected { transform: translateY(-14px); outline: 3px solid var(--danger); box-shadow: 0 8px 16px rgba(178, 58, 58, 0.35); }
+.playing-card.selected:hover { transform: translateY(-14px); }
 
 .results { margin-top: 12px; font-size: 14px; }
 .results h3 { margin-bottom: 6px; }

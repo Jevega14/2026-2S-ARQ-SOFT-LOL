@@ -1,0 +1,17 @@
+{
+  "participantes": 1,
+  "tasa_exito_cierre": 0.0,
+  "cierres_rechazados": 2,
+  "turno_media_s": 91.1637724375,
+  "turno_mediana_s": 75.864825,
+  "latencia_p50_ms": 6.592,
+  "latencia_p95_ms": 11.198,
+  "sus_promedio": 67.5,
+  "E1_conteo": 5.0,
+  "E2_rapidez": 5.0,
+  "E3_satisfaccion": 4.0,
+  "E4_rechazo_entendido": 4.0,
+  "tareas_sin_ayuda": null,
+  "partidas": 2,
+  "partidas_terminadas": 0
+}

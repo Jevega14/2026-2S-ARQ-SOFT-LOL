@@ -4,3 +4,6 @@ examples/external-provider/build/
 /.tooling/
 logs/
 __pycache__/
+
+# Archivos temporales de Office
+~$*
