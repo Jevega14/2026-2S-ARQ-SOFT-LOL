@@ -92,6 +92,41 @@ button:disabled { opacity: 0.45; cursor: not-allowed; }
 .actions { display: flex; flex-wrap: wrap; gap: 8px; }
 
 .turn-info { font-weight: 700; font-size: 17px; }
+.viewer-badge {
+  display: inline-block;
+  margin: 0 0 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #dfe9f3;
+  color: #1f3b57;
+  font-size: 13px;
+  font-weight: 600;
+}
+.turn-steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 4px 0 10px;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+}
+.turn-steps li {
+  counter-increment: step;
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: #ece8dc;
+  color: var(--muted);
+  font-size: 14px;
+}
+.turn-steps li::before { content: counter(step) ". "; font-weight: 700; }
+.turn-steps li.done { text-decoration: line-through; }
+.turn-steps li.current {
+  background: #256b3a;
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 0 0 3px rgba(37, 107, 58, 0.25);
+}
 .message { color: #256b3a; font-weight: 600; min-height: 20px; }
 .error { color: var(--danger); font-weight: 600; min-height: 20px; }
 .hint { color: var(--muted); font-size: 13px; }

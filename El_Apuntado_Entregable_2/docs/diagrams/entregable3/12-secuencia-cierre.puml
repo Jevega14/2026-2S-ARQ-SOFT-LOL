@@ -6,7 +6,7 @@ skinparam sequenceMessageAlign left
 skinparam sequenceGroupBodyBackGroundColor #FFFFFF
 
 actor "Jugador" as J
-box "Navegador" #F6F2E7
+box "Navegador" #F2F4F1
   participant "UI\n(app.js)" as UI
 end box
 box "Proceso Spring Boot (JVM)" #EEF4EA

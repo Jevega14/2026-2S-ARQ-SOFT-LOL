@@ -32,7 +32,7 @@ Una política de archivo que separe rondas cambiaría la frontera transaccional 
 - La suma del historial debe coincidir con `totals`.
 - Verificar recuperación tras reinicio y rechazo preventivo a 12 MiB.
 
-Estos son criterios pendientes de ejecución en el MVP.
+Verificación en el Entregable 3: `GameFlowMongoIT.concurrentClosesFromTwoServerInstances` y `MongoGameRepositoryIT.concurrentSavesFromTheSameVersionLetExactlyOneWin` (cierres simultáneos), `CommandIdempotencyTest.retryingACloseDoesNotDuplicateScores` (reintentos), `FullGameTest` (suma del historial igual a `totals`), `GameFlowMongoIT.recoversAfterARestartAndFinishesTheGameAt101` (reinicio) y `MongoGameRepository.ensureSize` (límite de 12 MiB).
 
 ## Revisión
 

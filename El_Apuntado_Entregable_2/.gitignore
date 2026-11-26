@@ -7,3 +7,6 @@ __pycache__/
 
 # Archivos temporales de Office
 ~$*
+
+# Archivos del sistema macOS
+.DS_Store

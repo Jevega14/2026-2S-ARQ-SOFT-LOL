@@ -67,7 +67,7 @@ Fragmentos combinados:
   `IAuditTrail`; los adaptadores viven en `persistence`, `realtime` y `audit`; solo `config` conoce las
   implementaciones concretas.
 
-### Implementado vs. pendiente (retroalimentación E2, punto 2.4)
+### Implementado frente al diseño de la Entrega 2 (retroalimentación E2, punto 2.4)
 
 Todo lo dibujado está implementado y probado. Elementos del diseño objetivo de la Entrega 2 que **no** están
 en el código (se discuten en la retrospectiva como desviación consciente):

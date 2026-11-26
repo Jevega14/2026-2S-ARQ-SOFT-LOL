@@ -1,20 +1,20 @@
-# AGENTS.md — El Apuntado, Entregable 2
+# Guía de contribución — El Apuntado
 
 ## Propósito
 
-Este repositorio contiene el soporte arquitectónico del juego El Apuntado.
-No es un MVP completo: la presentación, la orquestación de turnos, la
-persistencia, la red y el cierre transaccional siguen siendo esqueletos o
-funcionalidades pendientes.
+Este repositorio contiene el MVP del juego El Apuntado (Entregable 3): interfaz
+web, orquestación de turnos, persistencia en MongoDB, notificación por WebSocket,
+cierre transaccional con idempotencia y auditoría por comando. Esta guía resume
+las reglas que el equipo sigue al modificar el código.
 
 ## Tecnologías y comandos
 
 - Java 17.
-- Maven 3.9.9 o compatible.
+- Maven Wrapper incluido (Maven 3.9.16).
 - Ejecutar comandos desde esta carpeta:
 
   ```bash
-  mvn clean verify
+  ./mvnw clean verify
   ```
 
 - Las pruebas viven en `tests/`, configurado como fuente de pruebas en
@@ -49,8 +49,7 @@ estas pruebas para permitir una dependencia indebida.
 - El cierre otorga 0 puntos a quien cierra; los demás suman todas sus cartas.
 - Hay eliminación desde 101 puntos; gana el último jugador no eliminado.
 
-Antes de implementar reglas aún pendientes, contrastarlas con el README y los
-ADR pertinentes.
+Antes de cambiar una regla, contrastarla con el README y los ADR pertinentes.
 
 ## Variantes extensibles
 

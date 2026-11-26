@@ -1,7 +1,7 @@
 @startuml 11-despliegue
 !include _estilo.iuml
 title Diagrama UML de Despliegue — El Apuntado MVP (docker compose)
-skinparam nodeBackgroundColor #F6F2E7
+skinparam nodeBackgroundColor #F2F4F1
 skinparam nodeBorderColor #2F3E36
 skinparam artifactBackgroundColor #FFFFFF
 skinparam databaseBackgroundColor #E9F1E4

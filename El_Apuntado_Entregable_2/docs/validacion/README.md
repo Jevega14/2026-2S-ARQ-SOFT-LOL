@@ -8,7 +8,9 @@
 | [ENCUESTA.md](ENCUESTA.md) | SUS (S1–S10), preguntas del juego (E1–E5) y abiertas (A1–A3) |
 | `usuarios.csv` · `encuesta.csv` · `observaciones.csv` | Plantillas (solo encabezados) que se llenan después de cada sesión |
 | [evidencias/](evidencias/README.md) | Logs de auditoría, capturas, videos y encuestas (3.2) |
-| [MEJORAS.md](MEJORAS.md) | Plan de ajustes post-validación (3.4) |
+| [PILOTO-1.md](PILOTO-1.md) | Sesión piloto 1: evidencias, métricas, observaciones O1–O7 y encuesta de P01 |
+| `usuarios-piloto1.csv` · `encuesta-piloto1.csv` · `resultados-piloto1.md` · `resumen-piloto1.json` | Datos y resultados de la sesión piloto 1 |
+| [MEJORAS.md](MEJORAS.md) | Plan de ajustes post-validación (3.4): MJ1 y MJ3 implementadas, MJ2 planificada |
 | `resultados.md` | Lo genera `scripts/validacion_metricas.py` (3.3) |
 
 ## El día de la sesión, en 6 pasos
@@ -30,5 +32,6 @@ python3 scripts/validacion_metricas.py --audit docs/validacion/evidencias/logs \
 ```
 
 El script está probado con datos sintéticos (`scripts/test_validacion_metricas.py`, también en el CI)
-y con un ensayo técnico contra la app real. **Ningún archivo de esta carpeta contiene todavía datos de
-usuarios**: se llenan solo con las sesiones reales.
+y con el registro real de la sesión piloto 1. Las plantillas `usuarios.csv`, `encuesta.csv` y
+`observaciones.csv` siguen vacías para las siguientes sesiones; los datos del piloto están en sus
+archivos `*-piloto1`.

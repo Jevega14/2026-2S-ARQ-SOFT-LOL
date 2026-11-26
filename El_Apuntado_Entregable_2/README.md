@@ -60,12 +60,13 @@ SPRING_PROFILES_ACTIVE=mongo ./mvnw spring-boot:run
    dispositivo a X»; la mano solo se muestra al pulsar «Ver mi mano».
 3. **Varios dispositivos:** en «Jugar desde varios dispositivos» hay un enlace por
    jugador (`/?game={id}&player={playerId}`). En red local reemplaza `localhost`
-   por la IP del equipo servidor. Cada navegador ve solo su mano y se actualiza
-   por WebSocket.
-4. En tu turno: roba del mazo o del pozo, ordena la mano (por palo o número; la
-   carta recién robada se resalta), toca la carta que quieres botar y confirma con
-   «Descartar» (puedes cambiarla o cancelar antes), y luego «Terminar turno» o
-   «Intentar cierre». Un cierre inválido se rechaza explicando la regla.
+   por la IP del equipo servidor. Cada navegador ve solo su mano, indica de quién
+   es («Este navegador es de X») y se actualiza por WebSocket.
+4. En tu turno, un indicador de tres pasos resalta lo que toca hacer: roba del
+   mazo o del pozo, ordena la mano (por palo o número; la carta recién robada se
+   resalta), toca la carta que quieres botar y confirma con «Descartar» (puedes
+   cambiarla o cancelar antes), y luego «Terminar turno» o «Intentar cierre». Un
+   cierre inválido se rechaza explicando la regla.
 5. Recargar la página (`/?game={id}`) recupera la partida desde el servidor.
 
 ## Reglas implementadas (perfil MVP1)

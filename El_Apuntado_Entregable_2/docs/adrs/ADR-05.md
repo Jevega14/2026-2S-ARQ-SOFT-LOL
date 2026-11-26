@@ -31,7 +31,7 @@ El cliente conserva la versión y solicita un snapshot al reconectar o detectar 
 - Los clientes no deben recibir mazos completos ni manos ajenas.
 - ArchUnit impide que el dominio importe `java.net`, drivers o infraestructura.
 
-Las pruebas de publicación y privacidad quedan pendientes del adaptador.
+Verificación en el Entregable 3: `GameApplicationServiceTest.publisherFailureDoesNotRevertTheCommittedCommand` (fallo del publicador tras el commit), `publishesAfterCommitWithOneAuthorizedViewPerPlayer`, `theViewerOnlyReceivesItsOwnHand` y `WebSocketRealtimePublisherTest.sendsAnAuthorizedProjectionToEachViewer` (privacidad de manos y mazo).
 
 ## Revisión
 

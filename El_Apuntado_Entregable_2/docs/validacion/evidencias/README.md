@@ -9,4 +9,7 @@ Solo material real de las sesiones (nada de ejemplos ni datos simulados).
 | `videos/` | Grabaciones de pantalla cortas, o `enlaces.md` con links | `sesion1-U01-U02.mp4` |
 | `encuestas/` | Exportación del formulario o fotos de las hojas | `encuesta-sesion1.csv` |
 
+La sesión piloto 1 está en `logs/audit-20261125-piloto1.jsonl` y `capturas/piloto1-0[1-5]-*.png`;
+las capturas `mj1-*` y `mj3-*` verifican las mejoras implementadas.
+
 No subir rostros sin consentimiento ni nombres reales. Archivos de más de 50 MB: enlazarlos en `videos/enlaces.md`.

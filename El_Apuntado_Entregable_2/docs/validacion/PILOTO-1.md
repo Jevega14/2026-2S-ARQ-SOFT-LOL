@@ -3,12 +3,12 @@
 **Fecha:** 2026-11-25, 22:40–23:20 UTC · **Entorno:** `docker compose` local (perfil `mongo`, baraja `random`)
 **Modo:** dos pestañas del mismo equipo, una por jugador (enlaces `/?game=&player=`).
 **Participantes:** asiento `p1` «Jessi», integrante del equipo, sin experiencia previa en juegos de cartas.
-Asiento `p2` «Russ»: _[completar quién lo jugó]_.
+Asiento `p2` «Russ» (P02): otra persona invitada a la sesión; no respondió la encuesta.
 
-> Es una **prueba piloto interna**, no una sesión con usuarios externos. Sirve para validar el
-> protocolo, el registro de auditoría y el script de métricas, y aporta hallazgos de usabilidad reales.
-> No reemplaza las 3–5 sesiones del protocolo ni se mezcla con `usuarios.csv`, `encuesta.csv` u
-> `observaciones.csv`: la encuesta de P01 está en `encuesta-piloto1.csv` y `usuarios-piloto1.csv`.
+> Es una **prueba piloto**: sirvió para validar el protocolo, el registro de auditoría y el script de
+> métricas, y aportó hallazgos de usabilidad reales. Como una de las dos personas integra el equipo,
+> sus datos se guardan aparte de las plantillas del protocolo (`usuarios.csv`, `encuesta.csv`,
+> `observaciones.csv`): la encuesta de P01 está en `encuesta-piloto1.csv` y `usuarios-piloto1.csv`.
 
 ## Evidencia
 
@@ -63,5 +63,5 @@ que, en el mismo computador, una pestaña dijera «tu turno» mientras otra most
 ## Hallazgos que alimentan `MEJORAS.md`
 
 - **MJ1** (O2): descarte en dos pasos (seleccionar → «Descartar X»). **Implementada** el 2026-11-25; ver `MEJORAS.md`.
-- **MJ2** (O1, O4, O6, O7): ayuda de reglas en pantalla: grupos detectados en la mano, cuál sería la sobrante y aviso de que todas las cartas suman si otro cierra.
-- **MJ3** (O3, O5): rotular el modo («Este navegador es de Jessi») y resaltar la fase actual con la acción esperada.
+- **MJ2** (O1, O4, O6, O7): ayuda de reglas en pantalla: grupos detectados en la mano, cuál sería la sobrante y aviso de que todas las cartas suman si otro cierra. **Planificada** para la siguiente iteración (cambia el contrato `IReglaJuego`).
+- **MJ3** (O3, O5): rotular el modo («Este navegador es de Jessi») y resaltar el paso actual del turno. **Implementada** el 2026-11-25; ver `MEJORAS.md`.

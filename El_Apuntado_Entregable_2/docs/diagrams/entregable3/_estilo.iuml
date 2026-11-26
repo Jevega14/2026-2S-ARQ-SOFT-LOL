@@ -4,9 +4,9 @@ skinparam shadowing false
 skinparam roundCorner 8
 skinparam ArrowColor #2F3E36
 skinparam ArrowFontSize 11
-skinparam NoteBackgroundColor #FFF8DC
-skinparam NoteBorderColor #C9A227
+skinparam NoteBackgroundColor #EEF3EE
+skinparam NoteBorderColor #7FA58C
 skinparam TitleFontSize 16
 skinparam TitleFontStyle bold
-skinparam LegendBackgroundColor #F6F2E7
+skinparam LegendBackgroundColor #F2F4F1
 skinparam LegendBorderColor #9AA79C

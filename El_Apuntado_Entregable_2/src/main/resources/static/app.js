@@ -274,6 +274,8 @@ function render(view) {
     $("turn-info").textContent = "Turno de " + playerName(view, view.turn.playerId) + you +
       " · fase: " + (PHASE_LABEL[view.turn.phase] || view.turn.phase);
   }
+  renderViewerBadge(view);
+  renderTurnSteps(view);
   renderInvite(view);
 
   renderPlayers(view);
@@ -291,6 +293,42 @@ function render(view) {
   renderHand(view);
   renderActions(view);
   renderResults(view);
+}
+
+// MJ3: deja claro de quién es este navegador y cuál es el paso esperado del turno.
+function renderViewerBadge(view) {
+  const badge = $("viewer-badge");
+  if (state.deviceViewer) {
+    badge.textContent = "Este navegador es de " + playerName(view, state.deviceViewer) +
+      ": aquí solo ves tu mano, también durante el turno de los demás.";
+  } else {
+    badge.textContent = "Un solo dispositivo: al cambiar el turno, la mano se oculta hasta pulsar «Ver mi mano».";
+  }
+}
+
+function currentStep(view) {
+  if (view.turn.phase === "DRAW") return 0;
+  return view.hand.length === 11 ? 1 : 2;
+}
+
+function renderTurnSteps(view) {
+  const list = $("turn-steps");
+  const visible = view.status === "ACTIVE" && view.turn.playerId === view.viewerId && !awaitingHandoff(view);
+  list.classList.toggle("hidden", !visible);
+  list.innerHTML = "";
+  if (!visible) return;
+  const steps = ["Roba del mazo o del pozo", "Elige la carta y descártala", "Termina el turno o intenta el cierre"];
+  const current = currentStep(view);
+  steps.forEach((text, index) => {
+    const item = document.createElement("li");
+    item.textContent = text;
+    if (index < current) item.className = "done";
+    if (index === current) {
+      item.className = "current";
+      item.setAttribute("aria-current", "step");
+    }
+    list.append(item);
+  });
 }
 
 function renderPlayers(view) {
